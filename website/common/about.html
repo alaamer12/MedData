@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Primary Meta Tags -->
+    <title>About - MedData Engineering Hub</title>
+    <meta name="title" content="About - MedData Engineering Hub">
+    <meta name="description" content="Learn about our mission to provide high-quality datasets for data science and machine learning research.">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="../styles.css">
+    
+    <style>
+        /* Enhanced styles */
+        :root {
+            --primary-color: #4a6ef5;
+            --secondary-color: #38cfba;
+            --bg-light: #f7f9fc;
+            --text-dark: #1a1c23;
+            --text-light: #6b7280;
+            --border-color: #e5e7eb;
+            --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+        }
+        
+        /* Smooth scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Section transitions */
+        .content-section {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        
+        .content-section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Enhanced cards */
+        .point-card {
+            transition: var(--transition);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--card-shadow);
+        }
+        
+        .point-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        }
+        
+        .point-card h3 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        /* Enhanced contact section */
+        .contact-section {
+            background: linear-gradient(135deg, rgba(74, 110, 245, 0.1) 0%, rgba(56, 207, 186, 0.1) 100%);
+            border-radius: 16px;
+            padding: 3rem;
+            margin: 3rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .contact-section::before {
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(74, 110, 245, 0.2) 0%, rgba(56, 207, 186, 0.2) 100%);
+            top: -150px;
+            right: -150px;
+            z-index: 0;
+        }
+        
+        .contact-section-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .contact-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .contact-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            flex: 1;
+            min-width: 240px;
+            text-align: center;
+        }
+        
+        .contact-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        }
+        
+        .contact-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            border-radius: 50%;
+            margin-bottom: 1rem;
+        }
+        
+        .contact-icon i {
+            font-size: 1.5rem;
+            color: white;
+        }
+        
+        .button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+        
+        .button.primary {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .button.primary:hover {
+            background: #3a5cd7;
+            transform: translateY(-2px);
+        }
+        
+        .button.secondary {
+            background: white;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+        }
+        
+        .button.secondary:hover {
+            background: #f0f4ff;
+            transform: translateY(-2px);
+        }
+        
+        /* Projects section */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .project-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        }
+        
+        .project-img {
+            height: 80px;
+            width: 100%;
+            max-width: 200px;
+            max-height: 80px;
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: relative;
+            margin: 0 auto;
+        }
+        
+        .project-img::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(180deg, rgba(26, 28, 35, 0) 0%, rgba(26, 28, 35, 0.8) 100%);
+        }
+        
+        .project-content {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .project-title {
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+        }
+        
+        .project-description {
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+        }
+        
+        .project-link {
+            align-self: flex-start;
+        }
+        
+        /* Team member enhancements */
+        .team-member {
+            border-radius: 12px;
+            overflow: hidden;
+            padding-top: 25px;
+            box-shadow: var(--card-shadow);
+            padding-bottom: 1rem;
+        }
+        
+        .team-photo {
+            width: 100%;
+            max-width: 200px;
+            height: auto;
+            max-height: 200px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-top: 20;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+        
+        .team-photo:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        }
+        
+        /* Animations for section transitions */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <a href="../index.html" class="logo">
+                <img src="../assets/images/logo.svg" alt="MedData Logo" width="32" height="32">
+                MedData
+            </a>
+            <nav>
+                <a href="../index.html#datasets">Datasets</a>
+                <a href="about.html" class="active">About</a>
+                <a href="learn.html">Learn More</a>
+                <a href="license.html">License</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="page-header">
+            <h1>About MedData</h1>
+            <p>Empowering data science research with high-quality datasets</p>
+        </section>
+
+        <section class="content-section">
+            <h2>Our Mission</h2>
+            <p>At MedData, we're committed to advancing the field of data science by providing researchers and developers with comprehensive, well-structured datasets. Our focus is on creating and maintaining datasets that enable meaningful analysis and machine learning applications.</p>
+            
+            <div class="mission-points">
+                <div class="point-card">
+                    <h3><i class="fas fa-bullseye" style="color: var(--primary-color);"></i> Quality First</h3>
+                    <p>We maintain strict quality standards for all our datasets, ensuring they're clean, well-documented, and ready for use.</p>
+                </div>
+                <div class="point-card">
+                    <h3><i class="fas fa-handshake" style="color: var(--primary-color);"></i> Open Collaboration</h3>
+                    <p>We believe in the power of community and welcome contributions from researchers and developers worldwide.</p>
+                </div>
+                <div class="point-card">
+                    <h3><i class="fas fa-book" style="color: var(--primary-color);"></i> Education</h3>
+                    <p>Beyond data, we provide comprehensive documentation and learning resources to help you make the most of our datasets.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <h2>Our Team</h2>
+            <div class="team-grid">
+                <div class="team-member">
+                    <img src="../assets/images//alaamer.png" alt="Alaamer"  class="team-photo" width="200" height="200">
+                    <h3>Alaamer</h3>
+                    <p class="role">Founder & Lead Developer</p>
+                    <p>Passionate about data engineering and machine learning. Creator of the Medium Articles Dataset.</p>
+                </div>
+                <!-- Add more team members as needed -->
+            </div>
+        </section>
+
+        <section class="content-section contact-section">
+            <div class="contact-section-content">
+                <h2>Get In Touch</h2>
+                <p>Have questions or want to contribute? We'd love to hear from you!</p>
+                
+                <div class="contact-links">
+                    <div class="contact-card">
+                        <div class="contact-icon">
+                            <i class="fab fa-github"></i>
+                        </div>
+                        <h3>GitHub</h3>
+                        <p>Explore our repositories and contribute to our open-source projects.</p>
+                        <a href="https://github.com/alaamer12" class="button primary">
+                            <i class="fab fa-github"></i> Follow @Alaamer
+                        </a>
+                    </div>
+                    
+                    <div class="contact-card">
+                        <div class="contact-icon">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <h3>Hugging Face</h3>
+                        <p>Check out our models and datasets available on Hugging Face.</p>
+                        <a href="https://huggingface.co/Alaamer" class="button secondary">
+                            <i class="fas fa-external-link-alt"></i> Visit Profile
+                        </a>
+                    </div>
+                    
+                    <div class="contact-card">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <h3>Email</h3>
+                        <p>Drop us a message for collaborations or questions about our datasets.</p>
+                        <a href="mailto:contact@meddata.org" class="button secondary">
+                            <i class="fas fa-envelope"></i> Send Email
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="content-section">
+            <h2>Other Projects by Alaamer</h2>
+            <p>Explore other innovative projects and tools developed by our founder.</p>
+            
+            <div class="projects-grid">
+                <div class="project-card">
+                    <div class="project-img" style="background-image: url('/api/placeholder/200/80');"></div>
+                    <div class="project-content">
+                        <h3 class="project-title">True-Core Utility Package</h3>
+                        <p class="project-description">A comprehensive Python utility library part of the True-family package collection, designed to simplify common programming tasks and enhance productivity.</p>
+                        <a href="https://true-core.readthedocs.io/en/latest/" class="button primary project-link">
+                            <i class="fas fa-book"></i> View Documentation
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="project-card">
+                    <div class="project-img" style="background-image: url('/api/placeholder/200/80');"></div>
+                    <div class="project-content">
+                        <h3 class="project-title">Personal Portfolio</h3>
+                        <p class="project-description">Explore Alaamer's professional portfolio showcasing various projects, skills, and achievements in the field of data science and software development.</p>
+                        <a href="https://portfolio-qiw8.vercel.app/" class="button primary project-link">
+                            <i class="fas fa-user"></i> Visit Portfolio
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="project-card">
+                    <div class="project-img" style="background-image: url('/api/placeholder/200/80');"></div>
+                    <div class="project-content">
+                        <h3 class="project-title">True-Family Packages</h3>
+                        <p class="project-description">A collection of integrated Python packages designed to work seamlessly together, providing a comprehensive toolkit for developers.</p>
+                        <a href="https://true-core.readthedocs.io/en/latest/" class="button primary project-link">
+                            <i class="fas fa-cube"></i> Explore Packages
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <div class="footer-links">
+                        <a href="../index.html">Home</a>
+                        <a href="about.html">About</a>
+                        <a href="learn.html">Learn More</a>
+                        <a href="license.html">License</a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3>Datasets</h3>
+                    <div class="footer-links">
+                        <a href="../../hub/medium/website/index.html">Medium Dataset</a>
+                        <a href="../../hub/devto/website/index.html">Dev.to Dataset</a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3>Legal</h3>
+                    <div class="footer-links">
+                        <a href="privacy.html">Privacy Policy</a>
+                        <a href="terms.html">Terms of Use</a>
+                    </div>
+                </div>
+            </div>
+            <div class="platform-logos">
+                <p>Powered by:</p>
+                <img src="https://cdn-static-1.medium.com/_/fp/icons/Medium-Avatar-500x500.svg" alt="Medium Platform" class="platform-logo" width="24" height="24">
+                <img src="https://www.kaggle.com/static/images/site-logo.svg" alt="Kaggle Platform" class="platform-logo" width="24" height="24">
+                <img src="https://huggingface.co/front/assets/huggingface_logo.svg" alt="Hugging Face Platform" class="platform-logo" width="24" height="24">
+            </div>
+            <div style="text-align: center; margin-top: 2rem; color: var(--text-light);">
+                <p> 2025 MedData. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Animation for sections
+        document.addEventListener('DOMContentLoaded', function() {
+            const sections = document.querySelectorAll('.content-section');
+            
+            // Initial check for sections in viewport
+            checkSections();
+            
+            // Check on scroll
+            window.addEventListener('scroll', checkSections);
+            
+            function checkSections() {
+                sections.forEach(section => {
+                    const sectionTop = section.getBoundingClientRect().top;
+                    const windowHeight = window.innerHeight;
+                    
+                    if (sectionTop < windowHeight * 0.8) {
+                        section.classList.add('visible');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

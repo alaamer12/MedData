@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Primary Meta Tags -->
+    <title>MedData - Data Engineering Hub</title>
+    <meta name="title" content="MedData - Data Engineering Hub">
+    <meta name="description" content="A comprehensive collection of datasets for data science and machine learning, featuring Medium articles and Dev.to posts.">
+    <meta name="keywords" content="data engineering, datasets, medium dataset, dev.to dataset, machine learning, data science">
+    <meta name="author" content="Alaamer">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="MedData - Data Engineering Hub">
+    <meta property="og:description" content="A comprehensive collection of datasets for data science and machine learning, featuring Medium articles and Dev.to posts.">
+    <meta property="og:image" content="assets/images/logo.svg">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="MedData - Data Engineering Hub">
+    <meta property="twitter:description" content="A comprehensive collection of datasets for data science and machine learning, featuring Medium articles and Dev.to posts.">
+    <meta property="twitter:image" content="assets/images/logo.svg">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
+    <link rel="apple-touch-icon" href="assets/images/logo.svg">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css">
+    <style>
+       
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+
+        nav a {
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        nav a:hover {
+            background-color: rgba(99, 102, 241, 0.1);
+            color: var(--primary);
+        }
+
+        nav a.active {
+            background-color: rgba(99, 102, 241, 0.15);
+            color: var(--primary);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <a href="#" class="logo">
+                <img src="assets/images/logo.svg" alt="MedData Logo" width="32" height="32">
+                MedData
+            </a>
+            <nav>
+                <a href="#datasets">Datasets</a>
+                <a href="common/about.html">About</a>
+                <a href="common/learn.html">Learn More</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <div class="heading-container">
+                    <h1>Data Engineering Hub</h1>
+                  </div>
+                <p>Empowering research with comprehensive datasets for data science and machine learning</p>
+                <div class="hero-cta">
+                    <a href="common/learn.html" class="button secondary">Learn More</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="datasets" class="datasets">
+            <div class="container">
+                <h2>Available Datasets</h2>
+                <div class="dataset-grid">
+                    <div class="dataset-card">
+                        <img src="assets/images/medium-logo.svg" alt="Medium Dataset" class="dataset-logo">
+                        <h3>Medium Articles Dataset</h3>
+                        <p>A comprehensive collection of Medium articles with rich metadata, perfect for NLP and content analysis.</p>
+                        <div class="dataset-stats">
+                            <div class="stat">
+                                <span class="stat-number">500K+</span>
+                                <span class="stat-label">Articles</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-number">10+</span>
+                                <span class="stat-label">Fields</span>
+                            </div>
+                        </div>
+                        <div class="dataset-links">
+                            <a href="../../hub/medium/website/index.html" class="button primary">View Dataset</a>
+                            <a href="common/learn.html#medium-dataset" class="button secondary">Documentation</a>
+                        </div>
+                    </div>
+                    <div class="dataset-card">
+                        <img src="assets/images/devto-logo.svg" alt="Dev.to Dataset" class="dataset-logo">
+                        <h3>Dev.to Articles Dataset</h3>
+                        <p>Coming soon! A rich collection of technical articles and discussions from the Dev.to community.</p>
+                        <div class="dataset-stats">
+                            <div class="stat">
+                                <span class="stat-number">Coming</span>
+                                <span class="stat-label">Soon</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-number">2025</span>
+                                <span class="stat-label">Release</span>
+                            </div>
+                        </div>
+                        <div class="dataset-links">
+                            <a href="../../hub/devto/website/index.html" class="button primary">Preview</a>
+                            <a href="common/learn.html#devto-dataset" class="button secondary">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="features">
+            <div class="container">
+                <h2>Why Choose Our Datasets?</h2>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h3>🔍 Rich Metadata</h3>
+                        <p>Comprehensive metadata for each entry, enabling deep analysis and research.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>📊 Clean & Normalized</h3>
+                        <p>Thoroughly cleaned and normalized data, ready for immediate use.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>🚀 Easy Integration</h3>
+                        <p>Compatible with popular ML frameworks and data analysis tools.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>📈 Regular Updates</h3>
+                        <p>Datasets are maintained and updated regularly with new content.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta-section">
+            <div class="container">
+                <h2>Ready to Start?</h2>
+                <p>Explore our datasets and documentation to kickstart your data science project</p>
+                <div class="cta-buttons">
+                    <a href="common/learn.html" class="button primary">Get Started</a>
+                    <a href="common/about.html" class="button secondary">About Us</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <div class="footer-links">
+                        <a href="#datasets">Datasets</a>
+                        <a href="common/about.html">About</a>
+                        <a href="common/learn.html">Learn More</a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3>Resources</h3>
+                    <div class="footer-links">
+                        <a href="https://github.com/alaamer12">GitHub</a>
+                        <a href="https://huggingface.co/Alaamer">Hugging Face</a>
+                        <a href="common/learn.html#documentation">Documentation</a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3>Legal</h3>
+                    <div class="footer-links">
+                        <a href="common/privacy.html">Privacy Policy</a>
+                        <a href="common/terms.html">Terms of Use</a>
+                        <a href="common/license.html">License</a>
+                    </div>
+                </div>
+            </div>
+            <div class="platform-logos">
+                <p>Powered by:</p>
+                <a href="https://medium.com/" target="_blank" rel="noopener noreferrer">
+                    <img src="https://cdn-static-1.medium.com/_/fp/icons/Medium-Avatar-500x500.svg" alt="Medium Platform" class="platform-logo" width="24" height="24">
+                </a>
+                <a href="https://www.kaggle.com/" target="_blank" rel="noopener noreferrer">
+                    <img src="https://www.kaggle.com/static/images/site-logo.svg" alt="Kaggle Platform" class="platform-logo" width="24" height="24">
+                </a>
+                <a href="https://huggingface.co/" target="_blank" rel="noopener noreferrer">
+                    <img src="https://huggingface.co/front/assets/huggingface_logo.svg" alt="Hugging Face Platform" class="platform-logo" width="24" height="24">
+                </a>
+            </div>
+            <div style="text-align: center; margin-top: 2rem; color: var(--text-light);">
+                <p> 2025 MedData. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,59 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+
+# Python files
+*.py text diff=python
+*.pyw text diff=python
+*.pyx text diff=python
+*.pxd text diff=python
+
+# Documents
+*.md text diff=markdown
+*.txt text
+*.rst text
+*.pdf binary
+*.doc binary
+*.docx binary
+
+# Data files
+*.csv text
+*.json text
+*.xml text
+*.yaml text
+*.yml text
+*.sqlite binary
+*.db binary
+
+# Web
+*.html text diff=html
+*.css text diff=css
+*.js text
+*.jsx text
+*.ts text
+*.tsx text
+
+# Graphics
+*.png binary
+*.jpg binary
+*.gif binary
+*.ico binary
+*.svg text
+
+# Scripts
+*.sh text eol=lf
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Configuration
+*.conf text
+*.config text
+*.ini text
+*.env text
+*.toml text
+*.yaml text
+*.yml text
+
+# Exclude files from exporting
+.gitattributes export-ignore
+.gitignore export-ignore
+.gitkeep export-ignore
