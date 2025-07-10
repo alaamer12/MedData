@@ -17,7 +17,7 @@ description: A premier data engineering hub providing comprehensive datasets for
 
 <section class="features">
   <div class="container">
-    <h2>Why Choose Our Datasets?</h2>
+    <h2>Why Choose Our Datasets? [New]</h2>
     <div class="feature-grid">
       <div class="feature-card">
         <h3>✨ Data Quality</h3>
