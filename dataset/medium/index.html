@@ -33,7 +33,11 @@
     <link rel="apple-touch-icon" href="/MedData/assets/images/logo.svg">
     
     <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Highlight.js -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/nord.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
     
     <!-- Styles -->
     <link rel="stylesheet" href="/MedData/assets/css/main.css">
@@ -73,33 +77,94 @@
             <a href="/MedData/docs/">Documentation</a>
             <a href="https://github.com/alaamer12/meddata" target="_blank">GitHub</a>
         </nav>
+        <button class="menu-toggle" aria-label="Toggle menu">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+        </button>
     </div>
-</header> 
-    
-    <main class="container">
-        <header class="dataset-header">
-  <img src="/MedData/assets/images/-logo.svg" alt="index.md Logo" class="dataset-logo">
-  <h1>index.md</h1>
-  <p>A comprehensive collection of Medium articles with rich metadata</p>
 </header>
 
-<section id="stats" class="stats">
-  
-</section>
-
-<section id="features" class="features">
-  
-</section>
-
-<section id="get-started" class="cta-section">
-  <h2>Ready to Get Started?</h2>
-  <p>Access the dataset through your preferred platform</p>
-  <div class="cta-buttons">
+<script>
+    // Mobile menu toggle
+    document.addEventListener('DOMContentLoaded', function() {
+        const menuToggle = document.querySelector('.menu-toggle');
+        const nav = document.querySelector('nav');
+        
+        menuToggle.addEventListener('click', function() {
+            nav.classList.toggle('active');
+        });
+    });
+</script> 
     
-  </div>
-</section>
+    <main>
+        <div class="dataset-page">
+  <header class="dataset-header">
+    <div class="container">
+      
+        <img src="/MedData/assets/images/-logo.svg" alt="index.md Logo" class="dataset-logo">
+      
+      <h1>index.md</h1>
+      <p>A comprehensive collection of Medium articles with rich metadata</p>
+    </div>
+  </header>
 
- 
+  <section id="stats" class="stats-section">
+    <div class="container">
+      <div class="stats">
+        
+      </div>
+    </div>
+  </section>
+
+  <section id="features" class="features">
+    <div class="container">
+      <h2>Features</h2>
+      <div class="feature-grid">
+        
+      </div>
+    </div>
+  </section>
+
+  <section id="get-started" class="cta-section">
+    <div class="container">
+      <h2>Ready to Get Started?</h2>
+      <p>Access the dataset through your preferred platform</p>
+      <div class="cta-buttons">
+        
+      </div>
+    </div>
+  </section>
+
+  
+  
+  <section id="metadata" class="metadata-section">
+    <div class="container">
+      <h2>Dataset Details</h2>
+      <div class="metadata-grid">
+        <div class="metadata-card">
+          <h3>Sources</h3>
+          <ul class="metadata-list">
+            
+          </ul>
+        </div>
+        
+        <div class="metadata-card">
+          <h3>Releases</h3>
+          <ul class="metadata-list">
+            <li><strong>Initial Release</strong>: </li>
+            <li><strong>Update Frequency</strong>: </li>
+            <li><strong>Status</strong>: <span class="status-badge "></span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  
+</div> 
     </main>
     
     <footer>
@@ -109,6 +174,7 @@
                 <h3>Quick Links</h3>
                 <div class="footer-links">
                     <a href="/MedData/">Home</a>
+                    <a href="/MedData/about/">About</a>
                     <a href="/MedData/docs/">Documentation</a>
                     <a href="https://github.com/alaamer12/meddata">GitHub</a>
                 </div>
@@ -116,6 +182,10 @@
             <div class="footer-section">
                 <h3>Datasets</h3>
                 <div class="footer-links">
+                    
+                    <a href="/MedData/dataset/medium/">Medium Articles Dataset</a>
+                    
+                    <a href="/MedData/dataset/devto/">Dev.to Articles Dataset</a>
                     
                 </div>
             </div>
@@ -136,14 +206,41 @@
                 </div>
             </div>
         </div>
-        <div class="platform-logos">
-            <p>Powered by:</p>
-            <img src="https://huggingface.co/front/assets/huggingface_logo.svg" alt="Hugging Face Platform" class="platform-logo" width="24" height="24">
+        
+        <div class="footer-social">
+            <h3>Follow Us</h3>
+            <div class="social-links">
+                <a href="https://github.com/alaamer12" class="social-link" aria-label="GitHub" target="_blank">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+                </a>
+                <a href="https://huggingface.co/Alaamer" class="social-link" aria-label="Hugging Face" target="_blank">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 95 95" fill="currentColor"><path d="M47.5 95C73.7335 95 95 73.7335 95 47.5C95 21.2665 73.7335 0 47.5 0C21.2665 0 0 21.2665 0 47.5C0 73.7335 21.2665 95 47.5 95Z" fill="none"></path><path d="M32.7001 34.0251C32.7001 36.1772 34.0859 38.0722 36.0227 38.8455C35.811 39.2071 35.5698 39.5391 35.3286 39.8712C34.0506 41.6903 32.4531 43.5853 32.4531 47.5V47.5603H38.6484V47.5C38.6484 45.348 37.2626 43.4823 35.3257 42.6797C35.5374 42.318 35.7786 41.986 36.0198 41.6539C37.2978 39.8348 38.8953 37.9398 38.8953 34.0251H32.7001V34.0251Z" fill="currentColor"></path><path d="M56.3516 47.5V47.5603H62.5469V47.5C62.5469 43.5853 60.9494 41.6903 59.6714 39.8712C59.4302 39.5391 59.189 39.2071 58.9773 38.8455C60.9141 38.0722 62.2999 36.1772 62.2999 34.0251H56.1046C56.1046 37.9398 57.7022 39.8348 58.9802 41.6539C59.2214 41.986 59.4626 42.318 59.6743 42.6797C57.7374 43.4823 56.3516 45.348 56.3516 47.5Z" fill="currentColor"></path></svg>
+                </a>
+                <a href="https://twitter.com/alaamer12" class="social-link" aria-label="Twitter" target="_blank">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg>
+                </a>
+            </div>
         </div>
+        
+        <div class="platform-logos">
+            <span>Powered by:</span>
+            <a href="https://huggingface.co/" target="_blank" class="platform-link">
+                <img src="https://huggingface.co/front/assets/huggingface_logo.svg" alt="Hugging Face Platform" class="platform-logo" width="24" height="24">
+                <span>Hugging Face</span>
+            </a>
+            <a href="https://jekyllrb.com/" target="_blank" class="platform-link">
+                <img src="/MedData/assets/images/jekyll-logo.svg" alt="Jekyll" class="platform-logo" width="24" height="24">
+                <span>Jekyll</span>
+            </a>
+        </div>
+        
         <div class="copyright">
-            <p>© 2025 MedData Engineering Hub. All rights reserved.</p>
+            <p>&copy; 2025 MedData Engineering Hub. All rights reserved.</p>
         </div>
     </div>
 </footer> 
+    
+    <!-- Scripts -->
+    <script src="/MedData/assets/js/main.js"></script>
 </body>
 </html> 
