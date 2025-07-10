@@ -15,14 +15,12 @@ A premier data engineering hub providing comprehensive datasets for machine lear
 - **Features**: Author info, claps, responses, tags
 - **Use Cases**: NLP, content analysis, recommendation systems
 - **Access**: [Dataset Page](https://meddata.ai/dataset/medium) | [Hugging Face](https://huggingface.co/datasets/Alaamer/medium-articles-posts-with-content)
-- **Documentation**: [Medium Dataset Docs](dataset/medium/docs.md)
 
 ### Dev.to Articles Dataset (Coming Soon)
 - **Status**: In development
 - **Expected**: Q2 2025
 - **Features**: Technical articles, code snippets, community metrics
 - **Preview**: [Dataset Preview](https://meddata.ai/dataset/devto)
-- **Documentation**: [Dev.to Dataset Docs](dataset/devto/docs.md)
 
 ## 🛠️ Quick Start
 
@@ -57,6 +55,27 @@ for article in dataset['train']:
     print("---")
 ```
 
+## 🔧 Troubleshooting
+
+If you encounter issues with dataset pages not displaying correctly or missing logos, try these steps:
+
+1. **Generate missing logos**:
+   ```bash
+   npm run generate-logos
+   ```
+
+2. **Setup dataset collections**:
+   ```bash
+   npm run setup-datasets
+   ```
+
+3. **Run both steps at once**:
+   ```bash
+   npm run setup
+   ```
+
+For more detailed troubleshooting, see [Troubleshooting Guide](docs/TROUBLESHOOTING.md).
+
 ## 🌟 Features
 
 ### Data Quality
@@ -81,12 +100,48 @@ for article in dataset['train']:
 
 Visit our [Documentation Hub](docs/README.md) for:
 - Getting Started Guide
-- Dataset Information
-- Usage Examples
+- Dataset Management
+- Website Development
 - Best Practices
-- Community Guidelines
+- Use Cases
 
-For technical documentation, including development setup and implementation details, visit our [Technical Documentation](docs/technical.md).
+## 🗺️ Project Structure
+
+```
+meddata/
+├── _config.yml                    # Jekyll configuration
+├── _datasets/                     # Dataset definitions (collection)
+│   ├── medium.yml                 # Medium dataset configuration
+│   └── devto.yml                  # Dev.to dataset configuration
+├── _layouts/                      # Jekyll templates
+├── _includes/                     # Reusable components
+├── assets/                        # Static assets
+├── scripts/                       # Automation scripts
+├── _data/                         # Jekyll data files
+├── docs/                          # Documentation
+└── dataset/                       # Dataset pages (generated)
+```
+
+## 🤖 CLI Tool
+
+The MedData CLI tool provides commands for managing datasets:
+
+```bash
+# Initialize a new dataset
+python meddata.py init <dataset_id> "<Dataset Name>" "Short description"
+
+# Process a dataset
+python meddata.py process <dataset_id>
+
+# Generate documentation
+python meddata.py docs <dataset_id>
+
+# Generate assets
+python meddata.py assets <dataset_id>
+
+# Build and serve website locally
+python meddata.py site --serve
+```
 
 ## 🤝 Contributing
 
