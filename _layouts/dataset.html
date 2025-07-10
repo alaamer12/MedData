@@ -130,12 +130,12 @@ print(f"Total samples: {len(dataset['train'])}")
         <div class="tech-card">
           <h3>Statistics</h3>
           <ul class="tech-list">
-            {% for stat_key, stat_value in page.dataset_details.statistics %}
-              {% if stat_value.first %}
-                <li>
-                  <strong>{{ stat_key | replace: '_', ' ' | capitalize }}</strong>:
+            {% for stat in page.dataset_details.statistics %}
+              <li>
+                <strong>{{ stat[0] | replace: '_', ' ' | capitalize }}</strong>:
+                {% if stat[1].first %}
                   <ul class="nested-list">
-                    {% for item in stat_value %}
+                    {% for item in stat[1] %}
                       {% if item.first %}
                         <li>{{ item.first }}: {{ item.last }}</li>
                       {% else %}
@@ -143,10 +143,10 @@ print(f"Total samples: {len(dataset['train'])}")
                       {% endif %}
                     {% endfor %}
                   </ul>
-                </li>
-              {% else %}
-                <li><strong>{{ stat_key | replace: '_', ' ' | capitalize }}</strong>: {{ stat_value }}</li>
-              {% endif %}
+                {% else %}
+                  {{ stat[1] }}
+                {% endif %}
+              </li>
             {% endfor %}
           </ul>
         </div>
