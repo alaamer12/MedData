@@ -27,27 +27,36 @@ datasetFiles.forEach(file => {
   // Extract needed values
   const datasetId = dataset.id;
   
-  // Create Jekyll collection file
+  // Create a new object with all the front matter data
+  const frontMatterData = {
+    layout: 'dataset',
+    title: dataset.name,
+    description: dataset.description,
+    id: datasetId,
+    status: dataset.status,
+    release_date: dataset.release_date,
+    expected_update: dataset.expected_update,
+    logo: {
+      text: dataset.logo?.text || datasetId.charAt(0).toUpperCase(),
+      background: dataset.logo?.background || 'circle',
+      colors: {
+        primary: dataset.logo?.colors?.primary || '#6366f1',
+        secondary: dataset.logo?.colors?.secondary || '#14b8a6'
+      }
+    },
+    stats: dataset.stats,
+    sources: dataset.sources,
+    publishing: dataset.publishing,
+    features: dataset.features,
+    dataset_details: dataset.dataset_details
+  };
+  
+  // Convert the entire object to properly formatted YAML
+  const yamlFrontMatter = yaml.dump(frontMatterData);
+  
+  // Create Jekyll collection file with proper front matter
   const jekyllContent = `---
-layout: dataset
-title: ${dataset.name}
-description: ${dataset.description}
-id: ${datasetId}
-status: ${dataset.status}
-release_date: ${dataset.release_date}
-expected_update: ${dataset.expected_update}
-logo:
-  text: ${dataset.logo?.text || datasetId.charAt(0).toUpperCase()}
-  background: ${dataset.logo?.background || 'circle'}
-  colors:
-    primary: ${dataset.logo?.colors?.primary || '#6366f1'}
-    secondary: ${dataset.logo?.colors?.secondary || '#14b8a6'}
-stats: ${yaml.dump(dataset.stats)}
-sources: ${yaml.dump(dataset.sources)}
-publishing: ${yaml.dump(dataset.publishing)}
-features: ${yaml.dump(dataset.features)}
-dataset_details: ${yaml.dump(dataset.dataset_details)}
----
+${yamlFrontMatter}---
 `;
 
   // Write to file
