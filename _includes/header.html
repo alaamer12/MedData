@@ -7,6 +7,19 @@
         <nav>
             <a href="{{ site.baseurl }}/">Home</a>
             <a href="{{ site.baseurl }}/about/">About</a>
+            <div class="nav-dropdown">
+                <a href="#" class="dropdown-toggle">Datasets <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></a>
+                <div class="dropdown-menu">
+                    {% for dataset_entry in site.data.datasets %}
+                        {% assign dataset = site.datasets | where: "id", dataset_entry.id | first %}
+                        {% if dataset %}
+                            <a href="{{ site.baseurl }}/dataset/{{ dataset.id }}/">{{ dataset.name }}</a>
+                        {% else %}
+                            <a href="{{ site.baseurl }}/dataset/{{ dataset_entry.id }}/">{{ dataset_entry.name }}</a>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
             <a href="{{ site.baseurl }}/docs/">Documentation</a>
             <a href="https://github.com/alaamer12/meddata" target="_blank">GitHub</a>
         </nav>
@@ -25,9 +38,26 @@
     document.addEventListener('DOMContentLoaded', function() {
         const menuToggle = document.querySelector('.menu-toggle');
         const nav = document.querySelector('nav');
+        const dropdownToggle = document.querySelector('.dropdown-toggle');
+        const dropdownMenu = document.querySelector('.dropdown-menu');
         
         menuToggle.addEventListener('click', function() {
             nav.classList.toggle('active');
         });
+        
+        // Toggle dropdown menu
+        if (dropdownToggle) {
+            dropdownToggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                dropdownMenu.classList.toggle('show');
+            });
+            
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.nav-dropdown')) {
+                    dropdownMenu.classList.remove('show');
+                }
+            });
+        }
     });
 </script> 

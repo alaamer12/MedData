@@ -11,11 +11,48 @@ layout: default
       {% endif %}
       <h1>{{ page.name }}</h1>
       <p>{{ page.description }}</p>
+      <div class="dataset-meta">
+        <div class="meta-item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="16" y1="2" x2="16" y2="6"></line>
+            <line x1="8" y1="2" x2="8" y2="6"></line>
+            <line x1="3" y1="10" x2="21" y2="10"></line>
+          </svg>
+          Released: {{ page.release_date | date: "%B %d, %Y" }}
+        </div>
+        <div class="meta-item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+          Status: <span class="status-badge {{ page.status }}">{{ page.status | capitalize }}</span>
+        </div>
+        <div class="meta-item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+            <polyline points="13 2 13 9 20 9"></polyline>
+          </svg>
+          Size: {{ page.dataset_details.size }}
+        </div>
+      </div>
     </div>
   </header>
 
+  <div class="dataset-subnav">
+    <div class="container">
+      <div class="subnav-container">
+        <a href="#stats" class="subnav-link">Overview</a>
+        <a href="#features" class="subnav-link">Features</a>
+        <a href="#usage" class="subnav-link">Usage</a>
+        <a href="#technical-details" class="subnav-link">Technical Details</a>
+        <a href="#get-started" class="subnav-link">Get Started</a>
+      </div>
+    </div>
+  </div>
+
   <section id="stats" class="stats-section">
     <div class="container">
+      <h2>Dataset Overview</h2>
       <div class="stats">
         {% for stat in page.stats %}
           <div class="stat-card">
@@ -41,25 +78,19 @@ layout: default
     </div>
   </section>
 
-  <section id="get-started" class="cta-section">
-    <div class="container">
-      <h2>Ready to Get Started?</h2>
-      <p>Access the dataset through your preferred platform</p>
-      <div class="cta-buttons">
-        {% for pub in page.publishing %}
-          <a href="{{ pub.url }}" class="button {% if forloop.first %}primary{% else %}secondary{% endif %}" target="_blank">
-            View on {{ pub.platform | capitalize }}
-          </a>
-        {% endfor %}
-      </div>
-    </div>
-  </section>
-
   {% if page.status == 'published' %}
   <section id="usage" class="code-section">
     <div class="container">
       <h2>Usage Example</h2>
-      <pre><code class="language-python">from datasets import load_dataset
+      <div class="code-block">
+        <button class="copy-button" onclick="copyCode()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          Copy
+        </button>
+        <pre><code class="language-python">from datasets import load_dataset
 
 # Load {{ page.name }}
 dataset = load_dataset("{{ page.publishing[0].repository }}")
@@ -72,15 +103,15 @@ for item in dataset['train']:
 print(f"Available fields: {dataset['train'].features}")
 
 # Dataset statistics
-print(f"Total samples: {len(dataset['train'])}")
-</code></pre>
+print(f"Total samples: {len(dataset['train'])}")</code></pre>
+      </div>
     </div>
   </section>
   {% endif %}
   
   <section id="metadata" class="metadata-section">
     <div class="container">
-      <h2>Dataset Details</h2>
+      <h2>Dataset Access</h2>
       <div class="metadata-grid">
         <div class="metadata-card">
           <h3>Sources</h3>
@@ -130,12 +161,12 @@ print(f"Total samples: {len(dataset['train'])}")
         <div class="tech-card">
           <h3>Statistics</h3>
           <ul class="tech-list">
-            {% for stat in page.dataset_details.statistics %}
-              <li>
-                <strong>{{ stat[0] | replace: '_', ' ' | capitalize }}</strong>:
-                {% if stat[1].first %}
+            {% for stat_pair in page.dataset_details.statistics %}
+              {% if stat_pair[1].first %}
+                <li>
+                  <strong>{{ stat_pair[0] | replace: '_', ' ' | capitalize }}</strong>:
                   <ul class="nested-list">
-                    {% for item in stat[1] %}
+                    {% for item in stat_pair[1] %}
                       {% if item.first %}
                         <li>{{ item.first }}: {{ item.last }}</li>
                       {% else %}
@@ -143,10 +174,10 @@ print(f"Total samples: {len(dataset['train'])}")
                       {% endif %}
                     {% endfor %}
                   </ul>
-                {% else %}
-                  {{ stat[1] }}
-                {% endif %}
-              </li>
+                </li>
+              {% else %}
+                <li><strong>{{ stat_pair[0] | replace: '_', ' ' | capitalize }}</strong>: {{ stat_pair[1] }}</li>
+              {% endif %}
             {% endfor %}
           </ul>
         </div>
@@ -189,4 +220,94 @@ print(f"Total samples: {len(dataset['train'])}")
     </div>
   </section>
   {% endif %}
+
+  <section id="get-started" class="cta-section">
+    <div class="container">
+      <h2>Ready to Get Started?</h2>
+      <p>Access the dataset through your preferred platform</p>
+      <div class="cta-buttons">
+        {% for pub in page.publishing %}
+          <a href="{{ pub.url }}" class="button {% if forloop.first %}primary{% else %}secondary{% endif %}" target="_blank">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="button-icon">
+              {% if pub.platform == 'huggingface' %}
+                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+              {% elsif pub.platform == 'github' %}
+                <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+              {% else %}
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                <polyline points="15 3 21 3 21 9"></polyline>
+                <line x1="10" y1="14" x2="21" y2="3"></line>
+              {% endif %}
+            </svg>
+            View on {{ pub.platform | capitalize }}
+          </a>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
 </div> 
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Sticky sub-navbar
+    const subnav = document.querySelector('.dataset-subnav');
+    const subnavLinks = document.querySelectorAll('.subnav-link');
+    const sections = document.querySelectorAll('section[id]');
+    
+    if (subnav) {
+      window.addEventListener('scroll', function() {
+        if (window.scrollY > 100) {
+          subnav.classList.add('scrolled');
+        } else {
+          subnav.classList.remove('scrolled');
+        }
+        
+        // Highlight active section in subnav
+        let current = '';
+        sections.forEach((section) => {
+          const sectionTop = section.offsetTop - 150;
+          const sectionHeight = section.offsetHeight;
+          if (scrollY >= sectionTop && scrollY < sectionTop + sectionHeight) {
+            current = section.getAttribute('id');
+          }
+        });
+        
+        subnavLinks.forEach((link) => {
+          link.classList.remove('active');
+          if (link.getAttribute('href').substring(1) === current) {
+            link.classList.add('active');
+          }
+        });
+      });
+      
+      // Smooth scroll for subnav links
+      subnavLinks.forEach((link) => {
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute('href'));
+          if (target) {
+            window.scrollTo({
+              top: target.offsetTop - 120,
+              behavior: 'smooth'
+            });
+          }
+        });
+      });
+    }
+    
+    // Code copy button
+    window.copyCode = function() {
+      const codeBlock = document.querySelector('.code-block code');
+      const copyButton = document.querySelector('.copy-button');
+      
+      if (codeBlock) {
+        navigator.clipboard.writeText(codeBlock.textContent).then(function() {
+          copyButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Copied!';
+          setTimeout(function() {
+            copyButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg> Copy';
+          }, 2000);
+        });
+      }
+    };
+  });
+</script> 
