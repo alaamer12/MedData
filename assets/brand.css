@@ -1,0 +1,66 @@
+/* Brand Colors and Design Tokens */
+:root {
+    /* Primary Colors */
+    --primary: #6366f1;
+    --primary-light: #818cf8;
+    
+    /* Secondary Colors */
+    --secondary: #14b8a6;
+    
+    /* Text Colors */
+    --text: #334155;
+    --text-light: #64748b;
+    
+    /* Background Colors */
+    --background: #ffffff;
+    --background-alt: #f8fafc;
+    
+    /* Design Tokens */
+    --border-radius: 12px;
+    --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+::selection {
+    background-color: var(--primary-light);
+    color: var(--background);
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+::-moz-selection {
+    background-color: var(--primary-light);
+    color: var(--background);
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--background-alt);
+    border-radius: var(--border-radius);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border-radius: var(--border-radius);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-light);
+}
+
+::-webkit-scrollbar-thumb:active {
+    background: var(--primary);
+}
+
+::-webkit-scrollbar-corner {
+    background: transparent;
+}
+
+html {
+    scroll-behavior: smooth;
+}

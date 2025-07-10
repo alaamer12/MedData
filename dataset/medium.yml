@@ -1,0 +1,42 @@
+id: medium
+name: Medium Articles Dataset
+description: A comprehensive collection of Medium articles with rich metadata
+status: published
+release_date: 2023-01-15
+expected_update: quarterly
+logo:
+  text: M
+  background: circle
+  colors:
+    primary: "#6366f1"
+    secondary: "#14b8a6"
+stats:
+  - value: 500K+
+    label: Articles
+  - value: 10+
+    label: Fields
+  - value: 100%
+    label: Unique Entries
+sources:
+  - platform: kaggle
+    dataset: "aiswaryaramachandran/medium-articles-with-content"
+    file: "Medium_AggregatedData.csv"
+  - platform: huggingface
+    dataset: "fabiochiu/medium-articles"
+publishing:
+  - platform: huggingface
+    repository: "Alaamer/medium-articles-posts-with-content"
+    url: "https://huggingface.co/datasets/Alaamer/medium-articles-posts-with-content"
+  - platform: github
+    repository: "alaamer12/medium-articles-dataset"
+    url: "https://github.com/alaamer12/medium-articles-dataset"
+features:
+  - icon: 🔍
+    title: Rich Metadata
+    description: Each article comes with comprehensive metadata including title, subtitle, author, publication, claps, and more.
+  - icon: 📊
+    title: Clean & Normalized
+    description: Data is thoroughly cleaned, normalized, and deduplicated for immediate use in your projects.
+  - icon: 🚀
+    title: Easy Integration
+    description: Compatible with popular ML frameworks and available through Hugging Face's datasets library. 
