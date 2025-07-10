@@ -71,6 +71,22 @@
         <nav>
             <a href="/MedData/">Home</a>
             <a href="/MedData/about/">About</a>
+            <div class="nav-dropdown">
+                <a href="#" class="dropdown-toggle">Datasets <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></a>
+                <div class="dropdown-menu">
+                    
+                        
+                        
+                            <a href="/MedData/dataset/medium/">Medium Articles Dataset</a>
+                        
+                    
+                        
+                        
+                            <a href="/MedData/dataset/devto/">Dev.to Articles Dataset</a>
+                        
+                    
+                </div>
+            </div>
             <a href="/MedData/docs/">Documentation</a>
             <a href="https://github.com/alaamer12/meddata" target="_blank">GitHub</a>
         </nav>
@@ -89,10 +105,27 @@
     document.addEventListener('DOMContentLoaded', function() {
         const menuToggle = document.querySelector('.menu-toggle');
         const nav = document.querySelector('nav');
+        const dropdownToggle = document.querySelector('.dropdown-toggle');
+        const dropdownMenu = document.querySelector('.dropdown-menu');
         
         menuToggle.addEventListener('click', function() {
             nav.classList.toggle('active');
         });
+        
+        // Toggle dropdown menu
+        if (dropdownToggle) {
+            dropdownToggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                dropdownMenu.classList.toggle('show');
+            });
+            
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.nav-dropdown')) {
+                    dropdownMenu.classList.remove('show');
+                }
+            });
+        }
     });
 </script> 
     
@@ -111,7 +144,7 @@
 <section id="datasets" class="datasets">
   <div class="container">
     <div class="section-header">
-      <h2>Available Datasets</h2>
+      <h2>Available Datasets [blank 1]</h2>
       <p class="section-subtitle">Explore our curated collection of high-quality datasets</p>
     </div>
     <div class="dataset-grid">
@@ -152,16 +185,15 @@
       
     </div>
     
+    <div class="dataset-meta">
+      
+      
+      
+    </div>
+    
     <div class="dataset-links">
-      <a href="/MedData/dataset/medium/" class="button primary">View Dataset</a>
-      <a href="" class="button secondary" target="_blank">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="button-icon">
-          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-          <polyline points="15 3 21 3 21 9"></polyline>
-          <line x1="10" y1="14" x2="21" y2="3"></line>
-        </svg>
-        
-      </a>
+      <a href="/MedData/dataset/medium/" class="button primary">View Details</a>
+      
     </div>
   </div>
 </div> 
@@ -203,16 +235,15 @@
       
     </div>
     
+    <div class="dataset-meta">
+      
+      
+      
+    </div>
+    
     <div class="dataset-links">
-      <a href="/MedData/dataset/devto/" class="button primary">View Dataset</a>
-      <a href="" class="button secondary" target="_blank">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="button-icon">
-          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-          <polyline points="15 3 21 3 21 9"></polyline>
-          <line x1="10" y1="14" x2="21" y2="3"></line>
-        </svg>
-        
-      </a>
+      <a href="/MedData/dataset/devto/" class="button primary">View Details</a>
+      
     </div>
   </div>
 </div> 
