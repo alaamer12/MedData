@@ -5,18 +5,74 @@ layout: default
   <div class="container">
     <h1>{{ page.title }}</h1>
     <p>{{ page.description }}</p>
+    <div class="hero-buttons">
+      <a href="#datasets" class="button primary">Explore Datasets</a>
+      <a href="{{ site.baseurl }}/docs/" class="button secondary">Documentation</a>
+    </div>
   </div>
 </section>
 
 {{ content }}
 
-<section class="newsletter">
+<section class="cta-section newsletter">
   <div class="container">
     <h2>Stay Updated</h2>
     <p>Subscribe to get notified about new datasets and updates</p>
     <form action="#" method="POST" class="subscribe-form">
-      <input type="email" name="email" placeholder="Your email address" required>
-      <button type="submit" class="button primary">Subscribe</button>
+      <div class="form-group">
+        <input type="email" name="email" placeholder="Your email address" required>
+        <button type="submit" class="button primary">Subscribe</button>
+      </div>
+      <small class="form-disclaimer">We respect your privacy and won't share your information.</small>
     </form>
   </div>
-</section> 
+</section>
+
+<script>
+  // Add scroll animation
+  document.addEventListener('DOMContentLoaded', function() {
+    // Add smooth scrolling to all links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+          behavior: 'smooth'
+        });
+      });
+    });
+    
+    // Add scroll reveal animation
+    const revealElements = document.querySelectorAll('.feature-card, .dataset-card, .stat-card, .workflow-step');
+    
+    function checkReveal() {
+      for (let i = 0; i < revealElements.length; i++) {
+        const windowHeight = window.innerHeight;
+        const elementTop = revealElements[i].getBoundingClientRect().top;
+        const elementVisible = 150;
+        
+        if (elementTop < windowHeight - elementVisible) {
+          revealElements[i].classList.add("active");
+        }
+      }
+    }
+    
+    window.addEventListener("scroll", checkReveal);
+    checkReveal();
+    
+    // Add header scroll effect
+    const header = document.querySelector('header');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+    });
+
+    // Add staggered delay to workflow steps
+    const workflowSteps = document.querySelectorAll('.workflow-step');
+    workflowSteps.forEach((step, index) => {
+      step.style.animationDelay = `${index * 0.2}s`;
+    });
+  });
+</script> 

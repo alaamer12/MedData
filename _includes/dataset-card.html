@@ -1,25 +1,39 @@
-<div class="dataset-card">
-  <img src="{{ site.baseurl }}/assets/images/{{ include.dataset.id }}-logo.svg" alt="{{ include.dataset.name }}" class="dataset-logo">
-  <h3>{{ include.dataset.name }}</h3>
-  <p>{{ include.dataset.description }}</p>
-  
-  <div class="dataset-stats">
-    {% for stat in include.dataset.stats %}
-      <div class="stat">
-        <span class="stat-number">{{ stat.value }}</span>
-        <span class="stat-label">{{ stat.label }}</span>
-      </div>
-    {% endfor %}
-  </div>
-  
-  <div class="dataset-status">
-    <span class="status-badge {% if include.dataset.status == 'published' %}published{% else %}development{% endif %}">
-      {{ include.dataset.status | capitalize }}
-    </span>
-  </div>
-  
-  <div class="dataset-links">
-    <a href="{{ site.baseurl }}/dataset/{{ include.dataset.id }}/" class="button primary">View Dataset</a>
-    <a href="{{ site.baseurl }}/docs/{{ include.dataset.id }}/" class="button secondary">Documentation</a>
+<div class="dataset-card reveal">
+  <div class="dataset-content">
+    <div class="dataset-status">
+      <span class="status-badge {% if include.dataset.status == 'published' %}published{% else %}development{% endif %}">
+        {{ include.dataset.status | capitalize }}
+      </span>
+    </div>
+    
+    {% if include.dataset.logo.text %}
+      <div class="dataset-logo">{{ include.dataset.logo.text }}</div>
+    {% else %}
+      <img src="{{ site.baseurl }}/assets/images/{{ include.dataset.id }}-logo.svg" alt="{{ include.dataset.name }}" class="dataset-logo">
+    {% endif %}
+    
+    <h3>{{ include.dataset.name }}</h3>
+    <p>{{ include.dataset.description }}</p>
+    
+    <div class="dataset-stats">
+      {% for stat in include.dataset.stats %}
+        <div class="dataset-stat">
+          <span class="stat-number">{{ stat.value }}</span>
+          <span class="stat-label">{{ stat.label }}</span>
+        </div>
+      {% endfor %}
+    </div>
+    
+    <div class="dataset-links">
+      <a href="{{ site.baseurl }}/dataset/{{ include.dataset.id }}/" class="button primary">View Dataset</a>
+      <a href="{{ include.dataset.publishing[0].url }}" class="button secondary" target="_blank">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="button-icon">
+          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+          <polyline points="15 3 21 3 21 9"></polyline>
+          <line x1="10" y1="14" x2="21" y2="3"></line>
+        </svg>
+        {{ include.dataset.publishing[0].platform | capitalize }}
+      </a>
+    </div>
   </div>
 </div> 

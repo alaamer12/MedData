@@ -2,6 +2,7 @@
 layout: default
 title: About
 description: About MedData Engineering Hub
+permalink: /about/
 ---
 
 # About MedData Engineering Hub

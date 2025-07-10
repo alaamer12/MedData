@@ -33,7 +33,11 @@
     <link rel="apple-touch-icon" href="{{ site.baseurl }}/assets/images/logo.svg">
     
     <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Highlight.js -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/nord.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
     
     <!-- Styles -->
     <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/main.css">
@@ -48,10 +52,13 @@
 <body>
     {% include header.html %}
     
-    <main class="container">
+    <main>
         {{ content }}
     </main>
     
     {% include footer.html %}
+    
+    <!-- Scripts -->
+    <script src="{{ site.baseurl }}/assets/js/main.js"></script>
 </body>
 </html> 
