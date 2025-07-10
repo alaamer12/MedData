@@ -5,21 +5,21 @@
     
     <!-- Logo Text (parameterized) -->
     <text x="32" y="36" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="24" fill="white">
-        D
+        J
     </text>
     
     <!-- Data Points -->
-    <circle cx="18" cy="44" r="2" fill="#3b82f6"/>
-    <circle cx="46" cy="44" r="2" fill="#8b5cf6"/>
+    <circle cx="18" cy="44" r="2" fill="#fc5d5d"/>
+    <circle cx="46" cy="44" r="2" fill="#ff8a5b"/>
     
     <!-- Connecting Line -->
-    <path d="M20 44h24" stroke="url(#devto-gradient)" stroke-width="2"/>
+    <path d="M20 44h24" stroke="url(#jekyll-gradient)" stroke-width="2"/>
     
     <!-- Gradient Definition -->
     <defs>
-        <linearGradient id="devto-gradient" x1="20" y1="44" x2="44" y2="44" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stop-color="#3b82f6"/>
-            <stop offset="100%" stop-color="#8b5cf6"/>
+        <linearGradient id="jekyll-gradient" x1="20" y1="44" x2="44" y2="44" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#fc5d5d"/>
+            <stop offset="100%" stop-color="#ff8a5b"/>
         </linearGradient>
     </defs>
 </svg> 

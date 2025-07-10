@@ -1,0 +1,141 @@
+---
+layout: dataset
+title: Dev.to Articles Dataset
+description: A comprehensive collection of technical articles from Dev.to with code snippets and rich metadata
+id: devto
+status: development
+release_date: TBD
+expected_update: quarterly
+logo:
+  text: D
+  background: rect
+  colors:
+    primary: #3b82f6
+    secondary: #8b5cf6
+stats: - value: 200K+
+  label: Articles
+- value: 15+
+  label: Fields
+- value: 100%
+  label: Unique Entries
+
+sources: - platform: kaggle
+  dataset: devto/articles
+  file: DevTo_AggregatedData.csv
+
+publishing: - platform: huggingface
+  repository: Alaamer/devto-articles-with-code
+  url: https://huggingface.co/datasets/Alaamer/devto-articles-with-code
+- platform: github
+  repository: alaamer12/devto-articles-dataset
+  url: https://github.com/alaamer12/devto-articles-dataset
+
+features: - icon: 💻
+  title: Technical Content
+  description: >-
+    Technical articles focused on programming, web development, and software
+    engineering with code snippets.
+- icon: 🏷️
+  title: Tag Classification
+  description: >-
+    Articles categorized by technology tags for easy filtering and
+    topic-specific analysis.
+- icon: 📊
+  title: Community Metrics
+  description: >-
+    Includes reactions, comments, and other community engagement metrics for
+    each article.
+
+dataset_details: size: 2.3 GB
+file_format: CSV, JSON, Parquet
+splits:
+  - name: train
+    records: 192,450
+  - name: validation
+    records: 7,550
+schema:
+  - name: title
+    type: string
+    description: The title of the article
+    nullable: false
+  - name: description
+    type: string
+    description: Brief description or summary of the article
+    nullable: true
+  - name: author_name
+    type: string
+    description: The name of the article's author
+    nullable: false
+  - name: author_username
+    type: string
+    description: The username of the article's author
+    nullable: false
+  - name: published_at
+    type: datetime
+    description: The publication date and time of the article
+    nullable: false
+  - name: edited_at
+    type: datetime
+    description: The last edit date and time of the article
+    nullable: true
+  - name: url
+    type: string
+    description: The URL of the article
+    nullable: false
+  - name: canonical_url
+    type: string
+    description: The canonical URL if the article is republished
+    nullable: true
+  - name: content
+    type: string
+    description: The full text content of the article
+    nullable: false
+  - name: code_snippets
+    type: list[object]
+    description: Extracted code snippets with language identification
+    nullable: true
+  - name: tags
+    type: list[string]
+    description: List of tags associated with the article
+    nullable: false
+  - name: reactions_count
+    type: integer
+    description: Total number of reactions to the article
+    nullable: false
+  - name: comments_count
+    type: integer
+    description: Number of comments on the article
+    nullable: false
+  - name: reading_time_minutes
+    type: integer
+    description: Estimated reading time in minutes
+    nullable: false
+statistics:
+  avg_content_length: 1,856 words
+  avg_reading_time: 7.2 minutes
+  avg_code_snippets: 3.5 per article
+  top_tags:
+    - javascript
+    - webdev
+    - react
+    - python
+    - beginners
+    - node
+    - css
+    - tutorial
+  language_distribution:
+    - JavaScript: 28%
+    - Python: 17%
+    - HTML/CSS: 12%
+    - TypeScript: 10%
+    - Ruby: 5%
+    - Java: 5%
+    - Other: 23%
+preprocessing:
+  - Extracted code blocks and identified programming languages
+  - Normalized tags to lowercase and removed duplicates
+  - Parsed markdown content and preserved formatting
+  - Calculated reading time based on word count excluding code
+  - Removed spam and low-quality articles
+
+---
