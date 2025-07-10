@@ -23,9 +23,18 @@ jobs:
         with:
           ruby-version: '3.0'
           bundler-cache: true
-      
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
       - name: Install dependencies
+        run: npm install
         run: bundle install
+
+      - name: Setup project
+        run: npm run setup
       
       - name: Generate assets
         run: python scripts/generate-assets.py
