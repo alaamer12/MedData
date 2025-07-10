@@ -1,28 +1,35 @@
+{% if include.dataset %}
 <div class="dataset-card reveal">
   <div class="dataset-content">
     <div class="dataset-status">
-      <span class="status-badge {% if include.dataset.status == 'published' %}published{% else %}development{% endif %}">
-        {{ include.dataset.status | capitalize }}
+      <span class="status-badge {% if include.dataset.status == 'published' %}published{% elsif include.dataset.status == 'development' %}development{% else %}unknown{% endif %}">
+        {{ include.dataset.status | default: "Unknown" | capitalize }}
       </span>
     </div>
     
     {% if include.dataset.logo.text %}
       <div class="dataset-logo">{{ include.dataset.logo.text }}</div>
+    {% elsif include.dataset.logo.url %}
+      <img src="{{ include.dataset.logo.url }}" alt="{{ include.dataset.name }}" class="dataset-logo">
     {% else %}
-      <img src="{{ site.baseurl }}/assets/images/{{ include.dataset.id }}-logo.svg" alt="{{ include.dataset.name }}" class="dataset-logo">
+      <img src="{{ site.baseurl }}/assets/images/{{ include.dataset.id | default: 'default' }}-logo.svg" alt="{{ include.dataset.name | default: 'Dataset' }}" class="dataset-logo" onerror="this.onerror=null; this.src='{{ site.baseurl }}/assets/images/default-logo.svg';">
     {% endif %}
     
-    <h3>{{ include.dataset.name }}</h3>
-    <p>{{ include.dataset.description }}</p>
+    <h3>{{ include.dataset.name | default: "Dataset" }}</h3>
+    <p>{{ include.dataset.description | default: "No description available" | truncate: 120 }}</p>
     
+    {% if include.dataset.stats and include.dataset.stats.size > 0 %}
     <div class="dataset-stats">
       {% for stat in include.dataset.stats %}
+        {% if forloop.index <= 3 %}
         <div class="dataset-stat">
-          <span class="stat-number">{{ stat.value }}</span>
-          <span class="stat-label">{{ stat.label }}</span>
+          <span class="stat-number">{{ stat.value | default: "N/A" }}</span>
+          <span class="stat-label">{{ stat.label | default: "Statistic" }}</span>
         </div>
+        {% endif %}
       {% endfor %}
     </div>
+    {% endif %}
     
     <div class="dataset-meta">
       {% if include.dataset.release_date %}
@@ -46,12 +53,22 @@
           {{ include.dataset.expected_update }}
         </div>
       {% endif %}
+      
+      {% if include.dataset.dataset_details.size %}
+        <div class="meta-item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+            <polyline points="13 2 13 9 20 9"></polyline>
+          </svg>
+          {{ include.dataset.dataset_details.size }}
+        </div>
+      {% endif %}
     </div>
     
     <div class="dataset-links">
-      <a href="{{ site.baseurl }}/dataset/{{ include.dataset.id }}/" class="button primary">View Details</a>
+      <a href="{{ site.baseurl }}/dataset/{{ include.dataset.id }}/" class="button primary" aria-label="View details for {{ include.dataset.name | default: 'this dataset' }}">View Details</a>
       {% if include.dataset.publishing[0].url %}
-        <a href="{{ include.dataset.publishing[0].url }}" class="button secondary" target="_blank">
+        <a href="{{ include.dataset.publishing[0].url }}" class="button secondary" target="_blank" rel="noopener" aria-label="View {{ include.dataset.name | default: 'dataset' }} on {{ include.dataset.publishing[0].platform | capitalize }}">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="button-icon">
             {% if include.dataset.publishing[0].platform == 'huggingface' %}
               <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
@@ -68,4 +85,19 @@
       {% endif %}
     </div>
   </div>
-</div> 
+</div>
+{% else %}
+<div class="dataset-card error-card reveal">
+  <div class="dataset-content">
+    <div class="dataset-status">
+      <span class="status-badge error">Error</span>
+    </div>
+    <div class="dataset-logo error-logo">❌</div>
+    <h3>Missing Dataset</h3>
+    <p>Dataset configuration is missing or invalid.</p>
+    <div class="dataset-links">
+      <a href="{{ site.baseurl }}/" class="button primary">Return Home</a>
+    </div>
+  </div>
+</div>
+{% endif %} 

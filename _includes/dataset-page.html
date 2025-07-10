@@ -1,0 +1,19 @@
+{% assign dataset_id = include.dataset_id %}
+{% assign dataset_file = site.datasets | where: "id", dataset_id | first %}
+{% if dataset_file %}
+  {% include dataset-content.html dataset=dataset_file %}
+{% else %}
+  {% assign dataset_data = site.data.datasets | where: "id", dataset_id | first %}
+  {% assign dataset_config = site.data[dataset_id] %}
+  {% if dataset_config %}
+    {% include dataset-content.html dataset=dataset_config %}
+  {% else %}
+    <div class="error-boundary">
+      <div class="error-message">
+        <h2>Dataset Not Found</h2>
+        <p>Dataset configuration for <code>{{ dataset_id }}</code> was not found. Please check that <code>_datasets/{{ dataset_id }}.yml</code> exists and is properly formatted.</p>
+        <a href="{{ site.baseurl }}/" class="button primary">Return to Home</a>
+      </div>
+    </div>
+  {% endif %}
+{% endif %} 

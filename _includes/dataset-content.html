@@ -1,15 +1,18 @@
 {% assign page = include.dataset %}
 
+{% if page %}
 <div class="dataset-page">
   <header class="dataset-header">
     <div class="container">
       {% if page.logo.text %}
         <div class="dataset-logo">{{ page.logo.text }}</div>
+      {% elsif page.logo.url %}
+        <img src="{{ page.logo.url }}" alt="{{ page.name }} Logo" class="dataset-logo">
       {% else %}
-        <img src="{{ site.baseurl }}/assets/images/{{ page.id }}-logo.svg" alt="{{ page.name }} Logo" class="dataset-logo">
+        <img src="{{ site.baseurl }}/assets/images/{{ page.id | default: 'default' }}-logo.svg" alt="{{ page.name | default: 'Dataset' }} Logo" class="dataset-logo" onerror="this.onerror=null; this.src='{{ site.baseurl }}/assets/images/default-logo.svg';">
       {% endif %}
-      <h1>{{ page.name }}</h1>
-      <p>{{ page.description }}</p>
+      <h1>{{ page.name | default: "Dataset" }}</h1>
+      <p>{{ page.description | default: "No description available" }}</p>
       <div class="dataset-meta">
         <div class="meta-item">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -18,20 +21,20 @@
             <line x1="8" y1="2" x2="8" y2="6"></line>
             <line x1="3" y1="10" x2="21" y2="10"></line>
           </svg>
-          Released: {{ page.release_date | date: "%B %d, %Y" }}
+          Released: {{ page.release_date | default: "N/A" | date: "%B %d, %Y" }}
         </div>
         <div class="meta-item">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
           </svg>
-          Status: <span class="status-badge {{ page.status }}">{{ page.status | capitalize }}</span>
+          Status: <span class="status-badge {{ page.status | default: 'unknown' }}">{{ page.status | default: "Unknown" | capitalize }}</span>
         </div>
         <div class="meta-item">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
             <polyline points="13 2 13 9 20 9"></polyline>
           </svg>
-          Size: {{ page.dataset_details.size }}
+          Size: {{ page.dataset_details.size | default: "Unknown" }}
         </div>
       </div>
     </div>
@@ -52,28 +55,40 @@
   <section id="stats" class="stats-section">
     <div class="container">
       <h2>Dataset Overview</h2>
+      {% if page.stats and page.stats.size > 0 %}
       <div class="stats">
         {% for stat in page.stats %}
           <div class="stat-card">
-            <div class="stat-number">{{ stat.value }}</div>
-            <p>{{ stat.label }}</p>
+            <div class="stat-number">{{ stat.value | default: "N/A" }}</div>
+            <p>{{ stat.label | default: "Statistic" }}</p>
           </div>
         {% endfor %}
       </div>
+      {% else %}
+      <div class="no-data-message">
+        <p>No statistics are currently available for this dataset.</p>
+      </div>
+      {% endif %}
     </div>
   </section>
 
   <section id="features" class="features">
     <div class="container">
       <h2>Features</h2>
+      {% if page.features and page.features.size > 0 %}
       <div class="feature-grid">
         {% for feature in page.features %}
           <div class="feature-card">
-            <h3><span class="feature-icon">{{ feature.icon }}</span> {{ feature.title }}</h3>
-            <p>{{ feature.description }}</p>
+            <h3><span class="feature-icon">{{ feature.icon | default: "✓" }}</span> {{ feature.title | default: "Feature" }}</h3>
+            <p>{{ feature.description | default: "No description available" }}</p>
           </div>
         {% endfor %}
       </div>
+      {% else %}
+      <div class="no-data-message">
+        <p>Features information is not available for this dataset.</p>
+      </div>
+      {% endif %}
     </div>
   </section>
 
@@ -91,8 +106,8 @@
         </button>
         <pre><code class="language-python">from datasets import load_dataset
 
-# Load {{ page.name }}
-dataset = load_dataset("{{ page.publishing[0].repository }}")
+# Load {{ page.name | default: "Dataset" }}
+dataset = load_dataset("{{ page.publishing[0].repository | default: 'repository_name' }}")
 
 # Basic usage
 for item in dataset['train']:
@@ -248,65 +263,60 @@ print(f"Total samples: {len(dataset['train'])}")</code></pre>
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    // Sticky sub-navbar
-    const subnav = document.querySelector('.dataset-subnav');
-    const subnavLinks = document.querySelectorAll('.subnav-link');
-    const sections = document.querySelectorAll('section[id]');
-    
-    if (subnav) {
-      window.addEventListener('scroll', function() {
-        if (window.scrollY > 100) {
-          subnav.classList.add('scrolled');
-        } else {
-          subnav.classList.remove('scrolled');
+    // Handle navigation scrolling
+    const navLinks = document.querySelectorAll('.subnav-link');
+    navLinks.forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('href');
+        const targetElement = document.querySelector(targetId);
+        if (targetElement) {
+          window.scrollTo({
+            top: targetElement.offsetTop - 100,
+            behavior: 'smooth'
+          });
         }
-        
-        // Highlight active section in subnav
-        let current = '';
-        sections.forEach((section) => {
-          const sectionTop = section.offsetTop - 150;
-          const sectionHeight = section.offsetHeight;
-          if (scrollY >= sectionTop && scrollY < sectionTop + sectionHeight) {
-            current = section.getAttribute('id');
-          }
-        });
-        
-        subnavLinks.forEach((link) => {
-          link.classList.remove('active');
-          if (link.getAttribute('href').substring(1) === current) {
-            link.classList.add('active');
-          }
-        });
       });
-      
-      // Smooth scroll for subnav links
-      subnavLinks.forEach((link) => {
-        link.addEventListener('click', function(e) {
-          e.preventDefault();
-          const target = document.querySelector(this.getAttribute('href'));
-          if (target) {
-            window.scrollTo({
-              top: target.offsetTop - 120,
-              behavior: 'smooth'
-            });
-          }
-        });
-      });
-    }
-    
-    // Code copy button
+    });
+
+    // Copy code function
     window.copyCode = function() {
-      const codeBlock = document.querySelector('.code-block code');
-      const copyButton = document.querySelector('.copy-button');
-      
+      const codeBlock = document.querySelector('.code-block pre code');
       if (codeBlock) {
-        navigator.clipboard.writeText(codeBlock.textContent).then(function() {
-          copyButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Copied!';
-          setTimeout(function() {
-            copyButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg> Copy';
-          }, 2000);
-        });
+        const textToCopy = codeBlock.textContent;
+        navigator.clipboard.writeText(textToCopy).then(
+          function() {
+            const copyButton = document.querySelector('.copy-button');
+            const originalText = copyButton.innerHTML;
+            copyButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Copied!';
+            setTimeout(() => {
+              copyButton.innerHTML = originalText;
+            }, 2000);
+          },
+          function(err) {
+            console.error('Could not copy text: ', err);
+            alert('Failed to copy code. Please try again or copy manually.');
+          }
+        );
       }
     };
   });
-</script> 
+  
+  // Error handling for images
+  document.querySelectorAll('img').forEach(img => {
+    img.addEventListener('error', function() {
+      if (!this.src.includes('default')) {
+        this.src = '{{ site.baseurl }}/assets/images/default-logo.svg';
+      }
+    });
+  });
+</script>
+{% else %}
+<div class="error-boundary">
+  <div class="error-message">
+    <h2>Dataset Configuration Error</h2>
+    <p>The dataset configuration is missing or invalid.</p>
+    <a href="{{ site.baseurl }}/" class="button primary">Return to Home</a>
+  </div>
+</div>
+{% endif %} 
