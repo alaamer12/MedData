@@ -1,90 +1,125 @@
 # Troubleshooting Guide
 
-This document provides solutions for common issues you might encounter with the MedData Engineering Hub.
+This guide provides solutions for common issues you might encounter when working with the MedData Engineering Hub.
 
-## Missing Dataset Content
+## Website and Asset Issues
 
-If your dataset pages are showing blank or missing content, follow these steps:
+### Missing Dataset Logos or Incorrect Rendering
 
-1. Check that your dataset configuration files exist in the `_datasets` directory
-2. Make sure each dataset has a corresponding page in the `dataset/[dataset-id]/index.md` directory
-3. Verify that the dataset pages are using the correct include:
+If you encounter issues with dataset pages not displaying correctly or missing logos, try these steps:
 
-```markdown
----
-layout: dataset
-title: Your Dataset Title
-description: Your dataset description
----
-
-{% assign dataset_file = site.datasets | where: "id", "your-dataset-id" | first %}
-{% if dataset_file %}
-  {% include dataset-content.html dataset=dataset_file %}
-{% else %}
-  {% assign dataset_data = site.data.datasets | where: "id", "your-dataset-id" | first %}
-  {% assign dataset_config = site.data.your-dataset-id %}
-  {% if dataset_config %}
-    {% include dataset-content.html dataset=dataset_config %}
-  {% else %}
-    <div class="error-message">
-      <p>Dataset configuration not found. Please check that <code>_datasets/your-dataset-id.yml</code> exists and is properly formatted.</p>
-    </div>
-  {% endif %}
-{% endif %}
-```
-
-## Missing Logo Images (404 Errors)
-
-If you see 404 errors for logo images in the browser console, you need to generate the logo SVG files:
-
-1. Install dependencies:
-   ```bash
-   npm install
-   ```
-
-2. Generate the logos:
+1. **Generate missing logos**:
    ```bash
    npm run generate-logos
    ```
 
-3. Verify that the logo files were created in the `assets/images` directory
+2. **Setup dataset collections**:
+   ```bash
+   npm run setup-datasets
+   ```
 
-## Jekyll Logo Not Found
+3. **Run both steps at once**:
+   ```bash
+   npm run setup
+   ```
 
-If you're seeing a 404 error specifically for `jekyll-logo.svg`, the logo generator script will create this file along with all dataset logos. Run:
+### Jekyll Rendering Issues
 
-```bash
-npm run generate-logos
+If Jekyll is not rendering the site correctly:
+
+1. **Check Jekyll installation**:
+   ```bash
+   bundle exec jekyll -v
+   ```
+
+2. **Clear Jekyll cache**:
+   ```bash
+   bundle exec jekyll clean
+   ```
+
+3. **Check for syntax errors in front matter**:
+   ```bash
+   bundle exec jekyll build --verbose
+   ```
+
+## Dataset Processing Issues
+
+### Data Download Failures
+
+If you're experiencing issues downloading dataset source data:
+
+1. **Check network connectivity**:
+   ```bash
+   ping api.example.com
+   ```
+
+2. **Verify API tokens** in your environment variables
+
+3. **Check rate limits** on the API services you're using
+
+### Processing Pipeline Errors
+
+If the dataset processing pipeline fails:
+
+1. **Enable verbose logging**:
+   ```bash
+   python meddata.py process <dataset_id> --verbose
+   ```
+
+2. **Check disk space** for large datasets:
+   ```bash
+   df -h
+   ```
+
+3. **Try processing a subset** of the data:
+   ```bash
+   python meddata.py process <dataset_id> --limit 1000
+   ```
+
+## Hugging Face Integration Issues
+
+If you're having trouble with Hugging Face dataset uploads or downloads:
+
+1. **Verify Hugging Face token**:
+   ```bash
+   huggingface-cli whoami
+   ```
+
+2. **Check dataset visibility settings** in your Hugging Face account
+
+3. **Try with a smaller dataset** to isolate the issue:
+   ```bash
+   python meddata.py publish <dataset_id> --sample --token <token>
+   ```
+
+## Common Error Messages and Solutions
+
+### "Cannot find module 'xyz'"
+
+```
+npm install --save xyz
 ```
 
-This will create all the necessary logo files, including the Jekyll logo.
+### "Permission denied when writing to directory"
 
-## Manual Logo Creation
+```bash
+chmod +w <directory_path>
+```
 
-If you need to manually create a logo for a dataset:
+### "Dataset configuration not found"
 
-1. Copy the template from `assets/templates/dataset-logo.svg`
-2. Replace the following placeholders:
-   - `DATASET_ID_PLACEHOLDER` with your dataset ID
-   - `LOGO_TEXT_PLACEHOLDER` with the text to display (usually the first letter of your dataset name)
-   - `PRIMARY_COLOR_PLACEHOLDER` with your primary color (e.g., `#6366f1`)
-   - `SECONDARY_COLOR_PLACEHOLDER` with your secondary color (e.g., `#14b8a6`)
-3. Save the file as `assets/images/your-dataset-id-logo.svg`
+Ensure your dataset configuration file exists at `_datasets/<dataset_id>.yml` and follows the correct format.
 
-## Jekyll Collection Issues
+## Getting Additional Help
 
-If your dataset content isn't showing up correctly, make sure your `_config.yml` has the correct collections configuration:
+If you're still experiencing issues:
 
-```yaml
-collections:
-  datasets:
-    output: true
-    permalink: /dataset/:path/
+1. **Check existing GitHub issues** to see if others have encountered the same problem
 
-defaults:
-  - scope:
-      path: ""
-      type: "datasets"
-    values:
-      layout: "dataset"
-``` 
+2. **Open a new issue** with:
+   - Detailed description of the problem
+   - Steps to reproduce
+   - Error messages and logs
+   - System information (OS, Python version, etc.)
+
+3. **Join our Discord community** for real-time support 

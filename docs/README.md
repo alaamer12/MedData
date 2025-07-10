@@ -1,103 +1,89 @@
-# MedData Engineering Hub - Documentation
+# MedData Engineering Hub Documentation
 
-This documentation provides information on the structure and usage of the MedData Engineering Hub.
+Welcome to the MedData Engineering Hub documentation. This guide provides an overview of our project, its purpose, and how to use our datasets effectively.
 
-## Project Structure
+## About MedData Engineering Hub
 
-```
-meddata/
-├── _config.yml                    # Jekyll configuration
-├── _datasets/                     # Dataset definitions (collection)
-│   ├── medium.yml                 # Medium dataset configuration
-│   └── devto.yml                  # Dev.to dataset configuration
-├── _layouts/                      # Jekyll templates
-│   ├── default.html               # Base layout
-│   ├── dataset.html               # Dataset page layout
-│   └── home.html                  # Homepage layout
-├── _includes/                     # Reusable components
-│   ├── header.html                # Site header
-│   ├── footer.html                # Site footer
-│   ├── dataset-card.html          # Dataset card component
-│   └── stats-display.html         # Statistics display component
-├── assets/                        # Static assets
-│   ├── css/                       # Stylesheets
-│   ├── js/                        # JavaScript files
-│   ├── images/                    # Image files
-│   └── templates/                 # SVG templates for auto-generation
-├── scripts/                       # Automation scripts
-│   ├── create-dataset.py          # Dataset scaffolding script
-│   ├── process-dataset.py         # Dataset processing pipeline
-│   ├── publish-dataset.py         # Dataset publishing script
-│   └── generate-assets.py         # Asset generation script
-├── _data/                         # Jekyll data files
-│   └── datasets.yml               # Global dataset metadata
-├── docs/                          # Documentation
-├── index.md                       # Homepage
-└── dataset/                       # Dataset pages (generated)
-    ├── medium/                    # Medium dataset page
-    └── devto/                     # Dev.to dataset page
-```
+MedData Engineering Hub is a comprehensive resource for data scientists, researchers, and developers working with text data. We provide meticulously curated datasets from various online publishing platforms, focusing on content that can be valuable for natural language processing, machine learning, and data science applications.
 
-## Adding a New Dataset
+## Our Mission
 
-To add a new dataset to the MedData Engineering Hub, follow these steps:
+Our mission is to democratize access to high-quality, structured data for research and application development. We believe that by providing clean, well-documented datasets, we can accelerate innovation in fields such as:
 
-1. **Initialize Dataset Configuration**:
-   ```bash
-   python meddata.py init <dataset_id> "<Dataset Name>" "Short description of the dataset"
-   ```
-   This will create a configuration file in `_datasets/<dataset_id>.yml`.
+- Natural Language Processing
+- Content Analysis
+- Recommendation Systems
+- Machine Learning Research
+- Text Classification
+- Topic Modeling
 
-2. **Customize Configuration**:
-   Edit the generated configuration file to add details about the dataset, such as sources, publishing information, and features.
+## Datasets Overview
 
-3. **Generate Assets**:
-   ```bash
-   python meddata.py assets <dataset_id>
-   ```
-   This will generate assets like dataset logo based on the configuration.
+MedData Engineering Hub currently offers the following datasets:
 
-4. **Create Dataset Page**:
-   Create a directory and index file for the dataset page:
-   ```bash
-   mkdir -p dataset/<dataset_id>
-   ```
-   Create an `index.md` file in the directory with the appropriate front matter.
+### [Medium Articles Dataset](../dataset/medium/docs.md)
 
-5. **Process Dataset Data** (if applicable):
-   ```bash
-   python meddata.py process <dataset_id>
-   ```
-   This will download and process the data from the sources specified in the configuration.
+A comprehensive collection of 500,000+ articles from Medium with rich metadata, including author information, engagement metrics, and full article content. Perfect for content analysis, NLP research, and recommendation systems.
 
-6. **Generate Documentation**:
-   ```bash
-   python meddata.py docs <dataset_id>
-   ```
-   This will generate documentation files for the dataset.
+**Status:** Available  
+**Access:** [Dataset Page](https://meddata.ai/dataset/medium) | [Hugging Face](https://huggingface.co/datasets/Alaamer/medium-articles-posts-with-content)
 
-7. **Publish Dataset** (if applicable):
-   ```bash
-   python meddata.py publish <dataset_id> --token <api_token>
-   ```
-   This will publish the dataset to the platforms specified in the configuration.
+### [Dev.to Articles Dataset](../dataset/devto/docs.md)
 
-## Building the Website
+A specialized collection of technical articles from Dev.to containing code snippets, technical discussions, and developer community metrics. Ideal for software engineering research, programming education, and technical documentation analysis.
 
-To build and test the website locally:
+**Status:** In Development (Coming Q2 2025)  
+**Preview:** [Dataset Preview](https://meddata.ai/dataset/devto)
 
-```bash
-python meddata.py site --serve
-```
+## Getting Started
 
-This will build the Jekyll site and serve it locally for testing.
+To start using our datasets, you have several options:
 
-## Deploying the Website
+1. **Hugging Face Integration**: Our datasets are available through the Hugging Face datasets library, making them easy to integrate into your machine learning workflows.
 
-The website is automatically deployed via GitHub Actions when changes are pushed to the main branch. See `.github/workflows/build-deploy.yml` for deployment configuration.
+2. **Direct Download**: For offline use or custom processing, you can download our datasets directly from our website in various formats.
 
-## Additional Resources
+3. **API Access**: For real-time access or integration into your applications, we offer a RESTful API.
 
-- For more detailed information about each script, see the comments in the script files.
-- For information about the dataset processing pipeline, see the documentation in `docs/pipeline.md`.
-- For information about the template system, see the documentation in `docs/templates.md`. 
+## Use Cases
+
+Our datasets have been used in various applications, including:
+
+- Building recommendation engines for content platforms
+- Training NLP models for content categorization
+- Analyzing writing styles and content performance
+- Researching online content consumption patterns
+- Developing automated content generation systems
+
+## Community and Support
+
+We believe in the power of community-driven development and research. Here's how you can get involved:
+
+- **Contribute**: Suggest improvements, report issues, or contribute to dataset development
+- **Share**: Share your research or applications built with our datasets
+- **Connect**: Join our community on Discord or follow us on social media
+- **Support**: Consider supporting our work through sponsorships or donations
+
+## Documentation Structure
+
+This documentation is organized as follows:
+
+- **Getting Started**: Quick guides to start using our datasets
+- **Dataset Documentation**: Detailed information about each dataset
+- **Use Case Examples**: Examples of how to use our datasets for common tasks
+- **API Reference**: Documentation for our API endpoints
+- **Contributing Guide**: Information on how to contribute to the project
+
+## Legal and Ethical Considerations
+
+All our datasets are created with respect for copyright and ethical considerations. We only include publicly available content and follow ethical data collection practices. Please review our [Terms of Use](../TERMS.md) and [Privacy Policy](../PRIVACY.md) for more information.
+
+## Contact
+
+For questions, feedback, or collaboration inquiries, please reach out to us:
+
+- **Email**: contact@meddata.ai
+- **GitHub**: [Open an issue](https://github.com/alaamer12/meddata/issues)
+- **Twitter**: [@MedDataHub](https://twitter.com/MedDataHub)
+
+Thank you for your interest in MedData Engineering Hub! 
