@@ -17,6 +17,9 @@ collections:
   datasets_collection:
     output: true
     permalink: /dataset/:name/
+  documentation:
+    output: true
+    permalink: /docs/:path/
 
 # Default front matter
 defaults:
@@ -30,3 +33,12 @@ defaults:
       type: "datasets_collection"
     values:
       layout: "dataset" 
+  - scope:
+      path: "docs"
+      type: "pages"
+    values:
+      layout: "documentation"
+  - scope:
+      path: "dataset/*/docs.html"
+    values:
+      layout: "documentation" 

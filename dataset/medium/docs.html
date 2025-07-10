@@ -1,0 +1,208 @@
+---
+layout: documentation
+title: Medium Articles Dataset Documentation
+description: Comprehensive documentation for the Medium Articles Dataset including schema, usage, and technical details
+---
+
+<h1>Medium Articles Dataset Documentation</h1>
+
+<p class="lead">A comprehensive collection of Medium articles with rich metadata for machine learning and data science research.</p>
+
+<div class="dataset-meta">
+  <div class="meta-item">
+    <strong>Status:</strong> Published
+  </div>
+  <div class="meta-item">
+    <strong>Last Updated:</strong> 2025-01-15
+  </div>
+  <div class="meta-item">
+    <strong>License:</strong> MIT
+  </div>
+</div>
+
+<h2 id="overview">Overview</h2>
+
+<p>The Medium Articles Dataset is a comprehensive collection of 500,000+ articles from the Medium publishing platform. It includes full article content along with rich metadata such as author information, engagement metrics (claps, responses), publication details, and more.</p>
+
+<p>This dataset is ideal for researchers working on:</p>
+<ul>
+  <li>Natural Language Processing (NLP)</li>
+  <li>Content Analysis</li>
+  <li>Recommendation Systems</li>
+  <li>Author Attribution</li>
+  <li>Topic Modeling</li>
+</ul>
+
+<h2 id="schema">Dataset Schema</h2>
+
+<p>Each article in the dataset includes the following fields:</p>
+
+<table class="schema-table">
+  <thead>
+    <tr>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>id</code></td>
+      <td>string</td>
+      <td>Unique identifier for the article</td>
+    </tr>
+    <tr>
+      <td><code>url</code></td>
+      <td>string</td>
+      <td>Original URL of the article on Medium</td>
+    </tr>
+    <tr>
+      <td><code>title</code></td>
+      <td>string</td>
+      <td>Title of the article</td>
+    </tr>
+    <tr>
+      <td><code>subtitle</code></td>
+      <td>string</td>
+      <td>Subtitle or description of the article (optional)</td>
+    </tr>
+    <tr>
+      <td><code>content</code></td>
+      <td>string</td>
+      <td>Full text content of the article</td>
+    </tr>
+    <tr>
+      <td><code>claps</code></td>
+      <td>integer</td>
+      <td>Number of claps received by the article</td>
+    </tr>
+    <tr>
+      <td><code>responses</code></td>
+      <td>integer</td>
+      <td>Number of responses/comments on the article</td>
+    </tr>
+    <tr>
+      <td><code>reading_time</code></td>
+      <td>float</td>
+      <td>Estimated reading time in minutes</td>
+    </tr>
+    <tr>
+      <td><code>publication_date</code></td>
+      <td>datetime</td>
+      <td>Date and time when the article was published</td>
+    </tr>
+    <tr>
+      <td><code>last_modified_date</code></td>
+      <td>datetime</td>
+      <td>Date and time when the article was last modified</td>
+    </tr>
+    <tr>
+      <td><code>author</code></td>
+      <td>object</td>
+      <td>Information about the article's author</td>
+    </tr>
+    <tr>
+      <td><code>publication</code></td>
+      <td>object</td>
+      <td>Information about the publication (if published in one)</td>
+    </tr>
+    <tr>
+      <td><code>tags</code></td>
+      <td>array</td>
+      <td>List of tags/topics associated with the article</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="usage">Usage Examples</h2>
+
+<h3>Loading the Dataset with Hugging Face</h3>
+
+<pre><code class="python">
+from datasets import load_dataset
+
+# Load the dataset
+dataset = load_dataset("Alaamer/medium-articles-posts-with-content")
+
+# Basic exploration
+print(f"Dataset size: {len(dataset['train'])} articles")
+print(f"Sample article title: {dataset['train'][0]['title']}")
+print(f"Sample article author: {dataset['train'][0]['author']['name']}")
+</code></pre>
+
+<h3>Basic Text Analysis</h3>
+
+<pre><code class="python">
+import pandas as pd
+from collections import Counter
+
+# Convert to pandas for easier analysis
+df = pd.DataFrame(dataset['train'])
+
+# Find most common tags
+all_tags = [tag for tags_list in df['tags'] for tag in tags_list]
+most_common_tags = Counter(all_tags).most_common(10)
+print("Most common tags:", most_common_tags)
+
+# Articles with most engagement
+top_articles = df.sort_values(by='claps', ascending=False).head(5)
+print("Top articles by claps:")
+for _, article in top_articles.iterrows():
+    print(f"{article['title']} - {article['claps']} claps")
+</code></pre>
+
+<h2 id="technical-details">Technical Details</h2>
+
+<h3>Data Collection</h3>
+<p>This dataset was created by crawling publicly available articles from Medium.com during 2023-2024. The collection process respected robots.txt rules and rate limiting to avoid overloading the source servers.</p>
+
+<h3>Preprocessing</h3>
+<ul>
+  <li>HTML content was parsed to extract clean text and structure</li>
+  <li>Metadata was normalized to ensure consistent formatting</li>
+  <li>Duplicates and low-quality content were removed</li>
+  <li>Special characters and encoding issues were resolved</li>
+</ul>
+
+<h3>Dataset Format</h3>
+<p>The dataset is available in the following formats:</p>
+<ul>
+  <li><strong>Hugging Face Dataset:</strong> For seamless integration with ML pipelines</li>
+  <li><strong>Parquet Files:</strong> For efficient data storage and querying</li>
+  <li><strong>CSV Files:</strong> For maximum compatibility with tools</li>
+</ul>
+
+<h2 id="ethical-considerations">Ethical Considerations</h2>
+
+<p>This dataset contains only publicly available content. However, users should be mindful of the following:</p>
+
+<ul>
+  <li>Respect copyright and fair use principles when using the content</li>
+  <li>Be aware of potential biases in the collected data</li>
+  <li>Do not use the dataset for generating misleading or deceptive content</li>
+  <li>Consider the privacy implications when analyzing author information</li>
+</ul>
+
+<h2 id="citation">Citation</h2>
+
+<p>If you use this dataset in your research, please cite it as follows:</p>
+
+<pre><code>
+@dataset{alaamer2025medium,
+  title = {Medium Articles Dataset},
+  author = {Alaamer},
+  year = {2025},
+  publisher = {MedData Engineering Hub},
+  url = {https://huggingface.co/datasets/Alaamer/medium-articles-posts-with-content}
+}
+</code></pre>
+
+<h2 id="getting-help">Getting Help</h2>
+
+<p>If you encounter issues with this dataset or have questions, please:</p>
+
+<ul>
+  <li><a href="https://github.com/alaamer12/meddata/issues">Open an issue on GitHub</a></li>
+  <li><a href="https://huggingface.co/datasets/Alaamer/medium-articles-posts-with-content/discussions">Start a discussion on Hugging Face</a></li>
+  <li>Contact us directly at <a href="mailto:support@meddata.ai">support@meddata.ai</a></li>
+</ul> 

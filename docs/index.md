@@ -1,3 +1,9 @@
+---
+layout: documentation
+title: MedData Engineering Hub Documentation
+description: A comprehensive guide to using our datasets for machine learning and data science research
+---
+
 # MedData Engineering Hub Documentation
 
 Welcome to the MedData Engineering Hub documentation. This guide provides an overview of our project, its purpose, and how to use our datasets effectively.
@@ -21,19 +27,19 @@ Our mission is to democratize access to high-quality, structured data for resear
 
 MedData Engineering Hub currently offers the following datasets:
 
-### [Medium Articles Dataset](../dataset/medium/docs.md)
+### Medium Articles Dataset
 
 A comprehensive collection of 500,000+ articles from Medium with rich metadata, including author information, engagement metrics, and full article content. Perfect for content analysis, NLP research, and recommendation systems.
 
 **Status:** Available  
-**Access:** [Dataset Page](https://meddata.ai/dataset/medium) | [Hugging Face](https://huggingface.co/datasets/Alaamer/medium-articles-posts-with-content)
+**Access:** [Dataset Page]({{ site.baseurl }}/dataset/medium/) | [Hugging Face](https://huggingface.co/datasets/Alaamer/medium-articles-posts-with-content)
 
-### [Dev.to Articles Dataset](../dataset/devto/docs.md)
+### Dev.to Articles Dataset
 
 A specialized collection of technical articles from Dev.to containing code snippets, technical discussions, and developer community metrics. Ideal for software engineering research, programming education, and technical documentation analysis.
 
 **Status:** In Development (Coming Q2 2025)  
-**Preview:** [Dataset Preview](https://meddata.ai/dataset/devto)
+**Preview:** [Dataset Preview]({{ site.baseurl }}/dataset/devto/)
 
 ## Getting Started
 

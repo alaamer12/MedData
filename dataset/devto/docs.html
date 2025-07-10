@@ -1,0 +1,234 @@
+---
+layout: documentation
+title: Dev.to Articles Dataset Documentation
+description: Comprehensive documentation for the Dev.to Articles Dataset including schema, usage examples, and technical details
+---
+
+<h1>Dev.to Articles Dataset Documentation</h1>
+
+<p class="lead">A comprehensive collection of technical articles from Dev.to with code snippets and rich metadata for software engineering research.</p>
+
+<div class="dataset-meta">
+  <div class="meta-item">
+    <strong>Status:</strong> In Development
+  </div>
+  <div class="meta-item">
+    <strong>Expected Release:</strong> Q2 2025
+  </div>
+  <div class="meta-item">
+    <strong>License:</strong> MIT
+  </div>
+</div>
+
+<h2 id="overview">Overview</h2>
+
+<p>The Dev.to Articles Dataset is a specialized collection of technical articles from the Dev.to platform. It includes full article content along with code snippets, technical discussions, and community metrics. This dataset is particularly valuable for research in software engineering, programming education, technical documentation, and natural language processing of technical content.</p>
+
+<p>This dataset is designed for researchers working on:</p>
+<ul>
+  <li>Software Engineering Research</li>
+  <li>Programming Education</li>
+  <li>Code Understanding & Generation</li>
+  <li>Technical Documentation Analysis</li>
+  <li>Developer Community Dynamics</li>
+</ul>
+
+<h2 id="schema">Dataset Schema</h2>
+
+<p>Each article in the dataset will include the following fields:</p>
+
+<table class="schema-table">
+  <thead>
+    <tr>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>id</code></td>
+      <td>string</td>
+      <td>Unique identifier for the article</td>
+    </tr>
+    <tr>
+      <td><code>url</code></td>
+      <td>string</td>
+      <td>Original URL of the article on Dev.to</td>
+    </tr>
+    <tr>
+      <td><code>title</code></td>
+      <td>string</td>
+      <td>Title of the article</td>
+    </tr>
+    <tr>
+      <td><code>content</code></td>
+      <td>string</td>
+      <td>Full text content of the article</td>
+    </tr>
+    <tr>
+      <td><code>code_snippets</code></td>
+      <td>array</td>
+      <td>Array of code snippets extracted from the article</td>
+    </tr>
+    <tr>
+      <td><code>reactions</code></td>
+      <td>object</td>
+      <td>Detailed breakdown of reactions (likes, unicorns, etc.)</td>
+    </tr>
+    <tr>
+      <td><code>comments_count</code></td>
+      <td>integer</td>
+      <td>Number of comments on the article</td>
+    </tr>
+    <tr>
+      <td><code>reading_time_minutes</code></td>
+      <td>float</td>
+      <td>Estimated reading time in minutes</td>
+    </tr>
+    <tr>
+      <td><code>published_at</code></td>
+      <td>datetime</td>
+      <td>Date and time when the article was published</td>
+    </tr>
+    <tr>
+      <td><code>edited_at</code></td>
+      <td>datetime</td>
+      <td>Date and time when the article was last edited</td>
+    </tr>
+    <tr>
+      <td><code>author</code></td>
+      <td>object</td>
+      <td>Information about the article's author</td>
+    </tr>
+    <tr>
+      <td><code>tags</code></td>
+      <td>array</td>
+      <td>List of tags/topics associated with the article</td>
+    </tr>
+    <tr>
+      <td><code>programming_languages</code></td>
+      <td>array</td>
+      <td>List of programming languages detected in the article</td>
+    </tr>
+    <tr>
+      <td><code>series</code></td>
+      <td>object</td>
+      <td>Information about the series if the article is part of one</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="usage">Future Usage Examples</h2>
+
+<p>Once released, the dataset will support use cases such as:</p>
+
+<h3>Loading the Dataset with Hugging Face</h3>
+
+<pre><code class="python">
+from datasets import load_dataset
+
+# Load the dataset
+dataset = load_dataset("Alaamer/devto-articles-with-code")
+
+# Basic exploration
+print(f"Dataset size: {len(dataset['train'])} articles")
+print(f"Sample article title: {dataset['train'][0]['title']}")
+print(f"Sample programming languages: {dataset['train'][0]['programming_languages']}")
+</code></pre>
+
+<h3>Analyzing Code Snippets</h3>
+
+<pre><code class="python">
+import pandas as pd
+from collections import Counter
+
+# Convert to pandas for easier analysis
+df = pd.DataFrame(dataset['train'])
+
+# Count programming languages
+all_languages = [lang for langs in df['programming_languages'] for lang in langs]
+language_counts = Counter(all_languages).most_common(10)
+print("Most common programming languages:", language_counts)
+
+# Extract code snippets of a specific language
+javascript_snippets = []
+for article in dataset['train']:
+    for snippet in article['code_snippets']:
+        if snippet['language'] == 'javascript':
+            javascript_snippets.append({
+                'article_title': article['title'],
+                'code': snippet['code'],
+                'author': article['author']['username']
+            })
+            
+print(f"Found {len(javascript_snippets)} JavaScript snippets")
+</code></pre>
+
+<h2 id="technical-details">Technical Details</h2>
+
+<h3>Data Collection Process</h3>
+<p>This dataset is being created by crawling publicly available articles from Dev.to using their API and respecting their terms of service. The collection process includes rate limiting and proper attribution to ensure ethical data gathering.</p>
+
+<h3>Preprocessing</h3>
+<ul>
+  <li>Markdown content is parsed to extract text and code blocks</li>
+  <li>Code snippets are identified with their respective programming languages</li>
+  <li>Metadata is normalized to ensure consistent formatting</li>
+  <li>Duplicates and spam content are removed</li>
+  <li>Special characters and encoding issues are resolved</li>
+</ul>
+
+<h3>Dataset Format</h3>
+<p>The dataset will be available in the following formats:</p>
+<ul>
+  <li><strong>Hugging Face Dataset:</strong> For seamless integration with ML pipelines</li>
+  <li><strong>Parquet Files:</strong> For efficient data storage and querying</li>
+  <li><strong>JSON Files:</strong> For maximum compatibility with web tools</li>
+</ul>
+
+<h2 id="ethical-considerations">Ethical Considerations</h2>
+
+<p>This dataset will contain only publicly available content. However, users should be mindful of the following:</p>
+
+<ul>
+  <li>Respect copyright and fair use principles when using the content</li>
+  <li>Be aware of potential biases in the collected data</li>
+  <li>Do not use code snippets without proper attribution</li>
+  <li>Consider the open source licenses that may apply to code examples</li>
+</ul>
+
+<h2 id="development-status">Development Status</h2>
+
+<p>The Dev.to Articles Dataset is currently in development with an expected release in Q2 2025. The development process includes:</p>
+
+<ol>
+  <li><strong>Data Collection:</strong> In progress (50% complete)</li>
+  <li><strong>Data Processing:</strong> In progress (30% complete)</li>
+  <li><strong>Quality Assurance:</strong> Planned</li>
+  <li><strong>Documentation:</strong> Initial version complete</li>
+  <li><strong>Platform Integration:</strong> Planned</li>
+</ol>
+
+<h2 id="get-involved">Get Involved</h2>
+
+<p>We welcome community involvement in the development of this dataset. Here's how you can contribute:</p>
+
+<ul>
+  <li><a href="https://github.com/alaamer12/meddata/issues">Suggest features or improvements on GitHub</a></li>
+  <li>Help us refine our data collection methodology</li>
+  <li>Contribute to preprocessing scripts and tools</li>
+  <li>Participate in beta testing when available</li>
+</ul>
+
+<h2 id="stay-updated">Stay Updated</h2>
+
+<p>To receive updates on the development and release of the Dev.to Articles Dataset:</p>
+
+<ul>
+  <li>Subscribe to our newsletter</li>
+  <li>Follow us on <a href="https://twitter.com/MedDataHub">Twitter</a></li>
+  <li>Watch our <a href="https://github.com/alaamer12/meddata">GitHub repository</a></li>
+</ul>
+
+<p>For specific questions about this dataset, please contact us at <a href="mailto:datasets@meddata.ai">datasets@meddata.ai</a>.</p> 
