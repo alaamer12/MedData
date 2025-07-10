@@ -1,0 +1,22 @@
+---
+layout: default
+---
+<section class="hero">
+  <div class="container">
+    <h1>{{ page.title }}</h1>
+    <p>{{ page.description }}</p>
+  </div>
+</section>
+
+{{ content }}
+
+<section class="newsletter">
+  <div class="container">
+    <h2>Stay Updated</h2>
+    <p>Subscribe to get notified about new datasets and updates</p>
+    <form action="#" method="POST" class="subscribe-form">
+      <input type="email" name="email" placeholder="Your email address" required>
+      <button type="submit" class="button primary">Subscribe</button>
+    </form>
+  </div>
+</section> 

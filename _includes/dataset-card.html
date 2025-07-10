@@ -1,0 +1,25 @@
+<div class="dataset-card">
+  <img src="{{ site.baseurl }}/assets/images/{{ include.dataset.id }}-logo.svg" alt="{{ include.dataset.name }}" class="dataset-logo">
+  <h3>{{ include.dataset.name }}</h3>
+  <p>{{ include.dataset.description }}</p>
+  
+  <div class="dataset-stats">
+    {% for stat in include.dataset.stats %}
+      <div class="stat">
+        <span class="stat-number">{{ stat.value }}</span>
+        <span class="stat-label">{{ stat.label }}</span>
+      </div>
+    {% endfor %}
+  </div>
+  
+  <div class="dataset-status">
+    <span class="status-badge {% if include.dataset.status == 'published' %}published{% else %}development{% endif %}">
+      {{ include.dataset.status | capitalize }}
+    </span>
+  </div>
+  
+  <div class="dataset-links">
+    <a href="{{ site.baseurl }}/dataset/{{ include.dataset.id }}/" class="button primary">View Dataset</a>
+    <a href="{{ site.baseurl }}/docs/{{ include.dataset.id }}/" class="button secondary">Documentation</a>
+  </div>
+</div> 

@@ -1,0 +1,40 @@
+id: devto
+name: Dev.to Articles Dataset
+description: A comprehensive collection of technical articles from Dev.to with code snippets and rich metadata
+status: development
+release_date: TBD
+expected_update: quarterly
+logo:
+  text: D
+  background: rect
+  colors:
+    primary: "#3b82f6"
+    secondary: "#8b5cf6"
+stats:
+  - value: 200K+
+    label: Articles
+  - value: 15+
+    label: Fields
+  - value: 100%
+    label: Unique Entries
+sources:
+  - platform: kaggle
+    dataset: "devto/articles"
+    file: "DevTo_AggregatedData.csv"
+publishing:
+  - platform: huggingface
+    repository: "Alaamer/devto-articles-with-code"
+    url: "https://huggingface.co/datasets/Alaamer/devto-articles-with-code"
+  - platform: github
+    repository: "alaamer12/devto-articles-dataset"
+    url: "https://github.com/alaamer12/devto-articles-dataset"
+features:
+  - icon: 💻
+    title: Technical Content
+    description: Technical articles focused on programming, web development, and software engineering with code snippets.
+  - icon: 🏷️
+    title: Tag Classification
+    description: Articles categorized by technology tags for easy filtering and topic-specific analysis.
+  - icon: 📊
+    title: Community Metrics
+    description: Includes reactions, comments, and other community engagement metrics for each article. 

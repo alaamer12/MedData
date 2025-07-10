@@ -1,0 +1,24 @@
+title: MedData Engineering Hub
+description: A premier data engineering hub providing comprehensive datasets for machine learning and data science research
+baseurl: ""
+url: "https://meddata.ai"
+
+# Build settings
+markdown: kramdown
+plugins:
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+# Collections
+collections:
+  datasets:
+    output: true
+    permalink: /dataset/:path/
+
+# Default front matter
+defaults:
+  - scope:
+      path: ""
+      type: "datasets"
+    values:
+      layout: "dataset" 

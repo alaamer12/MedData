@@ -1,0 +1,45 @@
+<footer>
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <div class="footer-links">
+                    <a href="{{ site.baseurl }}/">Home</a>
+                    <a href="{{ site.baseurl }}/docs/">Documentation</a>
+                    <a href="https://github.com/alaamer12/meddata">GitHub</a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Datasets</h3>
+                <div class="footer-links">
+                    {% for dataset in site.datasets %}
+                    <a href="{{ site.baseurl }}/dataset/{{ dataset.id }}/">{{ dataset.name }}</a>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Legal</h3>
+                <div class="footer-links">
+                    <a href="{{ site.baseurl }}/privacy/">Privacy Policy</a>
+                    <a href="{{ site.baseurl }}/terms/">Terms of Use</a>
+                    <a href="{{ site.baseurl }}/license/">License</a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Contact</h3>
+                <div class="footer-links">
+                    <a href="https://github.com/alaamer12/meddata/issues">Report Issues</a>
+                    <a href="{{ site.baseurl }}/docs/contributing/">Contribute</a>
+                    <a href="https://huggingface.co/Alaamer">Hugging Face</a>
+                </div>
+            </div>
+        </div>
+        <div class="platform-logos">
+            <p>Powered by:</p>
+            <img src="https://huggingface.co/front/assets/huggingface_logo.svg" alt="Hugging Face Platform" class="platform-logo" width="24" height="24">
+        </div>
+        <div class="copyright">
+            <p>© 2025 MedData Engineering Hub. All rights reserved.</p>
+        </div>
+    </div>
+</footer> 

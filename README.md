@@ -14,23 +14,24 @@ A premier data engineering hub providing comprehensive datasets for machine lear
 - **Content**: Full articles with rich metadata
 - **Features**: Author info, claps, responses, tags
 - **Use Cases**: NLP, content analysis, recommendation systems
-- **Access**: [Dataset Page](https://meddata.ai/medium-dataset) | [Hugging Face](https://huggingface.co/datasets/Alaamer/medium-articles-posts-with-content)
+- **Access**: [Dataset Page](https://meddata.ai/dataset/medium) | [Hugging Face](https://huggingface.co/datasets/Alaamer/medium-articles-posts-with-content)
 
 ### Dev.to Articles Dataset (Coming Soon)
 - **Status**: In development
 - **Expected**: Q2 2025
 - **Features**: Technical articles, code snippets, community metrics
-- **Preview**: [Dataset Preview](https://meddata.ai/devto-dataset)
+- **Preview**: [Dataset Preview](https://meddata.ai/dataset/devto)
 
 ## 🛠️ Quick Start
 
 ### Installation
 ```bash
-# Using pip
-pip install meddata-client
+# Install Python dependencies
+pip install -r requirements.txt
 
-# Using conda
-conda install -c alaamer meddata-client
+# For website development
+gem install bundler
+bundle install
 ```
 
 ### Usage Example
@@ -70,10 +71,10 @@ for article in dataset['train']:
 
 ## 📖 Documentation
 
-Visit our [Documentation Hub](https://meddata.ai/docs) for:
+Visit our [Documentation Hub](docs/README.md) for:
 - Getting Started Guide
-- API Reference
-- Code Examples
+- Dataset Management
+- Website Development
 - Best Practices
 - Use Cases
 
@@ -81,24 +82,43 @@ Visit our [Documentation Hub](https://meddata.ai/docs) for:
 
 ```
 meddata/
-├── website/               # Main website files
-│   ├── assets/           # Images, styles, scripts
-│   ├── common/           # Shared pages
-│   └── styles.css        # Global styles
-├── hub/                  # Dataset hubs
-│   ├── medium/          # Medium dataset
-│   └── devto/           # Dev.to dataset
-├── docs/                # Documentation
-└── tests/              # Test suite
+├── _config.yml                    # Jekyll configuration
+├── _datasets/                     # Dataset definitions (collection)
+│   ├── medium.yml                 # Medium dataset configuration
+│   └── devto.yml                  # Dev.to dataset configuration
+├── _layouts/                      # Jekyll templates
+├── _includes/                     # Reusable components
+├── assets/                        # Static assets
+├── scripts/                       # Automation scripts
+├── _data/                         # Jekyll data files
+├── docs/                          # Documentation
+└── dataset/                       # Dataset pages (generated)
+```
+
+## 🤖 CLI Tool
+
+The MedData CLI tool provides commands for managing datasets:
+
+```bash
+# Initialize a new dataset
+python meddata.py init <dataset_id> "<Dataset Name>" "Short description"
+
+# Process a dataset
+python meddata.py process <dataset_id>
+
+# Generate documentation
+python meddata.py docs <dataset_id>
+
+# Generate assets
+python meddata.py assets <dataset_id>
+
+# Build and serve website locally
+python meddata.py site --serve
 ```
 
 ## 🤝 Contributing
 
-We welcome contributions! See our [Contributing Guide](CONTRIBUTING.md) for details on:
-- Code of Conduct
-- Development Process
-- Pull Request Guidelines
-- Style Guide
+We welcome contributions! Please see our [Contributing Guide](docs/CONTRIBUTING.md) for details on how to contribute.
 
 ## 📄 License
 
@@ -107,23 +127,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 🔗 Links
 
 - [Website](https://meddata.ai)
-- [Documentation](https://meddata.ai/docs)
+- [Documentation](docs/README.md)
 - [GitHub Repository](https://github.com/alaamer12/meddata)
 - [Hugging Face](https://huggingface.co/Alaamer)
 - [Issue Tracker](https://github.com/alaamer12/meddata/issues)
-
-## 📊 Stats & Recognition
-
-- 500K+ articles in the Medium dataset
-- Used by researchers worldwide
-- Featured on Hugging Face datasets
-- Active community support
-
-## 📬 Contact
-
-- GitHub: [@Alaamer](https://github.com/alaamer12)
-- Hugging Face: [@Alaamer](https://huggingface.co/Alaamer)
-- Website: [meddata.ai](https://meddata.ai)
 
 ---
 

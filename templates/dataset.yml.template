@@ -1,0 +1,38 @@
+id: {{id}}
+name: {{name}}
+description: {{description}}
+status: development
+release_date: {{date}}
+expected_update: quarterly
+logo:
+  text: {{id|first|upper}}
+  background: circle
+  colors:
+    primary: "#6366f1"
+    secondary: "#14b8a6"
+stats:
+  - value: 0+
+    label: Items
+  - value: 0+
+    label: Fields
+sources:
+  - platform: kaggle
+    dataset: ""
+    file: ""
+publishing:
+  - platform: huggingface
+    repository: ""
+    url: ""
+  - platform: github
+    repository: ""
+    url: ""
+features:
+  - icon: 🔍
+    title: Feature One
+    description: Description of feature one.
+  - icon: 📊
+    title: Feature Two
+    description: Description of feature two.
+  - icon: 🚀
+    title: Feature Three
+    description: Description of feature three. 

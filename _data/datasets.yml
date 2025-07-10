@@ -1,0 +1,23 @@
+- id: medium
+  name: Medium Articles Dataset
+  description: A comprehensive collection of Medium articles with rich metadata
+  status: published
+  stats:
+    - value: 500K+
+      label: Articles
+    - value: 10+
+      label: Fields
+    - value: 100%
+      label: Unique Entries
+
+- id: devto
+  name: Dev.to Articles Dataset
+  description: A comprehensive collection of technical articles from Dev.to with code snippets and rich metadata
+  status: development
+  stats:
+    - value: 200K+
+      label: Articles
+    - value: 15+
+      label: Fields
+    - value: 100%
+      label: Unique Entries 

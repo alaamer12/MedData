@@ -1,0 +1,53 @@
+---
+layout: default
+---
+<header class="dataset-header">
+  <img src="{{ site.baseurl }}/assets/images/{{ page.id }}-logo.svg" alt="{{ page.name }} Logo" class="dataset-logo">
+  <h1>{{ page.name }}</h1>
+  <p>{{ page.description }}</p>
+</header>
+
+<section id="stats" class="stats">
+  {% for stat in page.stats %}
+    <div class="stat-card">
+      <div class="stat-number">{{ stat.value }}</div>
+      <p>{{ stat.label }}</p>
+    </div>
+  {% endfor %}
+</section>
+
+<section id="features" class="features">
+  {% for feature in page.features %}
+    <div class="feature-card">
+      <h3>{{ feature.icon }} {{ feature.title }}</h3>
+      <p>{{ feature.description }}</p>
+    </div>
+  {% endfor %}
+</section>
+
+<section id="get-started" class="cta-section">
+  <h2>Ready to Get Started?</h2>
+  <p>Access the dataset through your preferred platform</p>
+  <div class="cta-buttons">
+    {% for pub in page.publishing %}
+      <a href="{{ pub.url }}" class="button {% if forloop.first %}primary{% else %}secondary{% endif %}">
+        View on {{ pub.platform | capitalize }}
+      </a>
+    {% endfor %}
+  </div>
+</section>
+
+{% if page.status == 'published' %}
+<section id="usage" class="code-section">
+  <h2>Usage Example</h2>
+  <pre><code class="language-python">from datasets import load_dataset
+
+# Load {{ page.name }}
+dataset = load_dataset("{{ page.publishing[0].repository }}")
+
+# Basic usage
+for item in dataset['train']:
+    print(f"Title: {item['title']}")
+</code></pre>
+</section>
+{% endif %} 

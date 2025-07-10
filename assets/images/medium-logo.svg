@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Background Shape -->
+    <circle cx="32" cy="32" r="30" fill="black"/>
+    
+    <!-- Logo Text -->
+    <text x="32" y="36" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="24" fill="white">
+        M
+    </text>
+    
+    <!-- Data Points -->
+    <circle cx="18" cy="44" r="2" fill="#6366f1"/>
+    <circle cx="46" cy="44" r="2" fill="#14b8a6"/>
+    
+    <!-- Connecting Line -->
+    <path d="M20 44h24" stroke="url(#medium-gradient)" stroke-width="2"/>
+    
+    <!-- Gradient Definition -->
+    <defs>
+        <linearGradient id="medium-gradient" x1="20" y1="44" x2="44" y2="44" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#6366f1"/>
+            <stop offset="100%" stop-color="#14b8a6"/>
+        </linearGradient>
+    </defs>
+</svg> 
