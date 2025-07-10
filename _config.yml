@@ -14,11 +14,19 @@ collections:
   datasets:
     output: true
     permalink: /dataset/:path/
+  datasets_collection:
+    output: true
+    permalink: /dataset/:name/
 
 # Default front matter
 defaults:
   - scope:
       path: ""
       type: "datasets"
+    values:
+      layout: "dataset"
+  - scope:
+      path: ""
+      type: "datasets_collection"
     values:
       layout: "dataset" 

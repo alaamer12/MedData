@@ -29,9 +29,15 @@ A premier data engineering hub providing comprehensive datasets for machine lear
 # Install Python dependencies
 pip install -r requirements.txt
 
+# Install Node.js dependencies
+npm install
+
 # For website development
 gem install bundler
 bundle install
+
+# Generate dataset logos and setup collections
+npm run setup
 ```
 
 ### Usage Example
@@ -48,6 +54,27 @@ for article in dataset['train']:
     print(f"Claps: {article['claps']}")
     print("---")
 ```
+
+## 🔧 Troubleshooting
+
+If you encounter issues with dataset pages not displaying correctly or missing logos, try these steps:
+
+1. **Generate missing logos**:
+   ```bash
+   npm run generate-logos
+   ```
+
+2. **Setup dataset collections**:
+   ```bash
+   npm run setup-datasets
+   ```
+
+3. **Run both steps at once**:
+   ```bash
+   npm run setup
+   ```
+
+For more detailed troubleshooting, see [Troubleshooting Guide](docs/TROUBLESHOOTING.md).
 
 ## 🌟 Features
 
