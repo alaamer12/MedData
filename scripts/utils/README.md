@@ -4,7 +4,9 @@ This directory contains utility modules for the MedData Engineering Hub project.
 
 ## Printer Module
 
-The `printer.py` module provides an enhanced terminal output utility that makes the MedData CLI more user-friendly. It uses the [rich](https://github.com/Textualize/rich) library to provide colorful, formatted output with visual elements like panels, tables, and progress bars.
+The `printer.py` module provides an enhanced terminal output utility that makes the MedData CLI more user-friendly. It
+uses the [rich](https://github.com/Textualize/rich) library to provide colorful, formatted output with visual elements
+like panels, tables, and progress bars.
 
 ### Features
 
@@ -19,7 +21,7 @@ The `printer.py` module provides an enhanced terminal output utility that makes 
 ### Usage
 
 ```python
-from utils.printer import printer
+from scripts.utils.printer import printer
 
 # Basic usage
 printer.header("Processing Dataset")
@@ -66,7 +68,8 @@ python utils/demo.py
 
 ### Fallback Mode
 
-If the `rich` library is not available, the Printer class falls back to plain text output with simple formatting, ensuring the CLI remains usable even without the dependency.
+If the `rich` library is not available, the Printer class falls back to plain text output with simple formatting,
+ensuring the CLI remains usable even without the dependency.
 
 ## Installation
 

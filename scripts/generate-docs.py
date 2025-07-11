@@ -1,25 +1,60 @@
 #!/usr/bin/env python3
-import os
-import sys
-import yaml
-from string import Template
-from datetime import datetime
+"""
+MedData Generate Docs Script - Creates documentation for datasets.
 
-def load_dataset_config(dataset_id):
-    """Load dataset configuration from YAML file."""
-    config_path = f"_datasets/{dataset_id}.yml"
-    if not os.path.exists(config_path):
-        print(f"Error: Dataset configuration not found: {config_path}")
-        sys.exit(1)
+This script generates various documentation files for datasets, including
+README.md, dataset cards for Hugging Face, citation files, and licenses.
+It uses templates to ensure consistency across datasets.
+"""
+from __future__ import annotations
+
+import sys
+from datetime import datetime
+from pathlib import Path
+from string import Template
+from typing import Dict, Any
+
+import yaml
+from scripts.utils.printer import printer
+from scripts.utils.config_manager import config_manager
+
+__all__ = ["load_dataset_config", "ensure_templates_exist", "generate_readme",
+           "generate_dataset_card", "generate_citation", "generate_license",
+           "generate_dataset_docs"]
+
+
+def load_dataset_config(dataset_id: str) -> Dict[str, Any]:
+    """
+    Load dataset configuration from YAML file.
+    
+    Args:
+        dataset_id: ID of the dataset to load
         
+    Returns:
+        Dictionary containing the dataset configuration
+        
+    Raises:
+        FileNotFoundError: If the configuration file doesn't exist
+        yaml.YAMLError: If the configuration file is not valid YAML
+    """
+    config_path = config_manager.paths.datasets_dir / f"{dataset_id}.yml"
+    if not config_path.exists():
+        printer.error(f"Dataset configuration not found: {config_path}")
+        sys.exit(1)
+
     with open(config_path, 'r') as file:
         return yaml.safe_load(file)
 
-def ensure_templates_exist():
-    """Create documentation templates if they don't exist."""
-    templates_dir = "templates"
-    os.makedirs(templates_dir, exist_ok=True)
+
+def ensure_templates_exist() -> None:
+    """
+    Create documentation templates if they don't exist.
     
+    Generates standard templates for README, dataset card, and citation files
+    if they don't already exist.
+    """
+    config_manager.paths.templates_dir.mkdir(exist_ok=True, parents=True)
+
     templates = {
         "dataset-readme.md.template": """# {{ name }}
 
@@ -159,40 +194,51 @@ preferred-citation:
   url: "{{ repository_url }}"
 """
     }
-    
+
     for filename, content in templates.items():
-        template_path = os.path.join(templates_dir, filename)
-        if not os.path.exists(template_path):
+        template_path = config_manager.paths.templates_dir / filename
+        if not template_path.exists():
             with open(template_path, 'w') as file:
                 file.write(content)
-            print(f"Created template: {template_path}")
+            printer.success(f"Created template: {template_path}")
 
-def generate_readme(dataset_id, config):
-    """Generate README.md for the dataset."""
-    print(f"Generating README for {dataset_id}...")
+
+def generate_readme(dataset_id: str, config: Dict[str, Any]) -> Path:
+    """
+    Generate README.md for the dataset.
     
+    Args:
+        dataset_id: ID of the dataset
+        config: Dataset configuration dictionary
+        
+    Returns:
+        Path to the generated README file
+    """
+    printer.header(f"Generating README for {dataset_id}...")
+
     # Load template
-    with open("templates/dataset-readme.md.template", 'r') as file:
+    template_path = config_manager.paths.templates_dir / "dataset-readme.md.template"
+    with open(template_path, 'r') as file:
         template = Template(file.read())
-    
+
     # Find Hugging Face and GitHub URLs
     huggingface_url = ""
     github_url = ""
     huggingface_repo = ""
-    
+
     for pub in config.get('publishing', []):
         if pub['platform'] == 'huggingface':
             huggingface_url = pub.get('url', f"https://huggingface.co/datasets/{pub['repository']}")
             huggingface_repo = pub['repository']
         elif pub['platform'] == 'github':
             github_url = pub.get('url', f"https://github.com/{pub['repository']}")
-    
+
     # Prepare template variables
     size_value = "Unknown"
     for stat in config.get('stats', []):
         if stat['label'].lower() in ['articles', 'items', 'entries']:
             size_value = stat['value']
-    
+
     variables = {
         'name': config['name'],
         'description': config['description'],
@@ -208,33 +254,44 @@ def generate_readme(dataset_id, config):
         'citation': 'Please see CITATION.cff file',
         'license': 'MIT License'
     }
-    
+
     # Generate README content
     try:
         content = template.substitute(**variables)
     except KeyError as e:
-        print(f"Error: Missing template variable: {e}")
+        printer.warning(f"Missing template variable: {e}")
         content = template.safe_substitute(**variables)
-    
+
     # Write README file
-    output_dir = f"docs/{dataset_id}"
-    os.makedirs(output_dir, exist_ok=True)
-    output_path = f"{output_dir}/README.md"
-    
+    output_dir = config_manager.paths.docs_dir / dataset_id
+    output_dir.mkdir(exist_ok=True, parents=True)
+    output_path = output_dir / "README.md"
+
     with open(output_path, 'w') as file:
         file.write(content)
-    
-    print(f"Generated README: {output_path}")
+
+    printer.success(f"Generated README: {output_path}")
     return output_path
 
-def generate_dataset_card(dataset_id, config):
-    """Generate dataset card for Hugging Face."""
-    print(f"Generating dataset card for {dataset_id}...")
+
+def generate_dataset_card(dataset_id: str, config: Dict[str, Any]) -> Path:
+    """
+    Generate dataset card for Hugging Face.
     
+    Args:
+        dataset_id: ID of the dataset
+        config: Dataset configuration dictionary
+        
+    Returns:
+        Path to the generated dataset card file
+    """
+    printer.header(f"Generating dataset card for {dataset_id}...")
+
     # Load template
-    with open("templates/dataset-card.md.template", 'r') as file:
+    template_path = config_manager.paths.templates_dir / "dataset-card.md.template"
+    with open(template_path, 'r') as file:
         template = Template(file.read())
-    
+
     # Determine size category
     size_category = "unknown"
     for stat in config.get('stats', []):
@@ -256,14 +313,14 @@ def generate_dataset_card(dataset_id, config):
                     size_category = "100K<n<1M"
                 else:
                     size_category = "1M<n<10M"
-    
+
     # Find repository URL
     repository_url = ""
     for pub in config.get('publishing', []):
         if pub['platform'] == 'huggingface':
             repository_url = pub.get('url', f"https://huggingface.co/datasets/{pub['repository']}")
             break
-    
+
     # Prepare template variables
     variables = {
         'name': config['name'],
@@ -281,33 +338,44 @@ def generate_dataset_card(dataset_id, config):
         'citation': 'Please see the citation information in the CITATION.cff file.',
         'contributions': 'Thanks to the MedData Engineering Hub team for preparing and publishing this dataset.'
     }
-    
+
     # Generate dataset card content
     try:
         content = template.substitute(**variables)
     except KeyError as e:
-        print(f"Error: Missing template variable: {e}")
+        printer.warning(f"Missing template variable: {e}")
         content = template.safe_substitute(**variables)
-    
+
     # Write dataset card file
-    output_dir = f"docs/{dataset_id}"
-    os.makedirs(output_dir, exist_ok=True)
-    output_path = f"{output_dir}/dataset-card.md"
-    
+    output_dir = config_manager.paths.docs_dir / dataset_id
+    output_dir.mkdir(exist_ok=True, parents=True)
+    output_path = output_dir / "dataset-card.md"
+
     with open(output_path, 'w') as file:
         file.write(content)
-    
-    print(f"Generated dataset card: {output_path}")
+
+    printer.success(f"Generated dataset card: {output_path}")
     return output_path
 
-def generate_citation(dataset_id, config):
-    """Generate CITATION.cff for the dataset."""
-    print(f"Generating citation for {dataset_id}...")
+
+def generate_citation(dataset_id: str, config: Dict[str, Any]) -> Path:
+    """
+    Generate CITATION.cff for the dataset.
     
+    Args:
+        dataset_id: ID of the dataset
+        config: Dataset configuration dictionary
+        
+    Returns:
+        Path to the generated citation file
+    """
+    printer.header(f"Generating citation for {dataset_id}...")
+
     # Load template
-    with open("templates/citation.cff.template", 'r') as file:
+    template_path = config_manager.paths.templates_dir / "citation.cff.template"
+    with open(template_path, 'r') as file:
         template = Template(file.read())
-    
+
     # Find repository URL
     repository_url = ""
     for pub in config.get('publishing', []):
@@ -316,12 +384,12 @@ def generate_citation(dataset_id, config):
             break
         elif pub['platform'] == 'github' and not repository_url:
             repository_url = pub.get('url', f"https://github.com/{pub['repository']}")
-    
+
     # Prepare template variables
     release_date = config.get('release_date', datetime.now().strftime("%Y-%m-%d"))
     if isinstance(release_date, datetime):
         release_date = release_date.strftime("%Y-%m-%d")
-    
+
     variables = {
         'name': config['name'],
         'repository_url': repository_url,
@@ -331,29 +399,38 @@ def generate_citation(dataset_id, config):
         'release_date': release_date,
         'release_year': release_date.split('-')[0] if isinstance(release_date, str) and '-' in release_date else "2025"
     }
-    
+
     # Generate citation content
     try:
         content = template.substitute(**variables)
     except KeyError as e:
-        print(f"Error: Missing template variable: {e}")
+        printer.warning(f"Missing template variable: {e}")
         content = template.safe_substitute(**variables)
-    
+
     # Write citation file
-    output_dir = f"docs/{dataset_id}"
-    os.makedirs(output_dir, exist_ok=True)
-    output_path = f"{output_dir}/CITATION.cff"
-    
+    output_dir = config_manager.paths.docs_dir / dataset_id
+    output_dir.mkdir(exist_ok=True, parents=True)
+    output_path = output_dir / "CITATION.cff"
+
     with open(output_path, 'w') as file:
         file.write(content)
-    
-    print(f"Generated citation: {output_path}")
+
+    printer.success(f"Generated citation: {output_path}")
     return output_path
 
-def generate_license(dataset_id):
-    """Generate LICENSE file for the dataset."""
-    print(f"Generating license for {dataset_id}...")
+
+def generate_license(dataset_id: str) -> Path:
+    """
+    Generate LICENSE file for the dataset.
     
+    Args:
+        dataset_id: ID of the dataset
+        
+    Returns:
+        Path to the generated license file
+    """
+    printer.header(f"Generating license for {dataset_id}...")
+
     license_content = """MIT License
 
 Copyright (c) 2025 MedData Engineering Hub
@@ -376,45 +453,60 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
-    
+
     # Write license file
-    output_dir = f"docs/{dataset_id}"
-    os.makedirs(output_dir, exist_ok=True)
-    output_path = f"{output_dir}/LICENSE"
-    
+    output_dir = config_manager.paths.docs_dir / dataset_id
+    output_dir.mkdir(exist_ok=True, parents=True)
+    output_path = output_dir / "LICENSE"
+
     with open(output_path, 'w') as file:
         file.write(license_content)
-    
-    print(f"Generated license: {output_path}")
+
+    printer.success(f"Generated license: {output_path}")
     return output_path
 
-def generate_dataset_docs(dataset_id):
-    """Generate all documentation for a dataset."""
-    print(f"Generating documentation for dataset: {dataset_id}")
+
+def generate_dataset_docs(dataset_id: str) -> None:
+    """
+    Generate all documentation for a dataset.
     
+    Args:
+        dataset_id: ID of the dataset to generate documentation for
+    """
+    printer.header(f"Generating documentation for dataset: {dataset_id}")
+
+    # Ensure directories exist
+    config_manager.ensure_directories_exist()
+
     # Ensure templates exist
     ensure_templates_exist()
-    
+
     # Load dataset configuration
     config = load_dataset_config(dataset_id)
-    
+
     # Generate documentation files
     readme_path = generate_readme(dataset_id, config)
     card_path = generate_dataset_card(dataset_id, config)
     citation_path = generate_citation(dataset_id, config)
     license_path = generate_license(dataset_id)
-    
-    print(f"\nDocumentation generation complete for {dataset_id}!")
-    print(f"Files generated:")
-    print(f"  - {readme_path}")
-    print(f"  - {card_path}")
-    print(f"  - {citation_path}")
-    print(f"  - {license_path}")
+
+    printer.success(f"\nDocumentation generation complete for {dataset_id}!")
+    printer.table(
+        ["Document Type", "Path"],
+        [
+            ["README", str(readme_path)],
+            ["Dataset Card", str(card_path)],
+            ["Citation", str(citation_path)],
+            ["License", str(license_path)]
+        ],
+        "Generated Files"
+    )
+
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("Usage: python generate-docs.py <dataset_id>")
-        print("Example: python generate-docs.py medium")
+        printer.error("Usage: python generate-docs.py <dataset_id>")
+        printer.guide("Example", ["python generate-docs.py medium"])
         sys.exit(1)
-    
-    generate_dataset_docs(sys.argv[1]) 
+
+    generate_dataset_docs(sys.argv[1])

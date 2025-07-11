@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 import os
-import yaml
 import shutil
-import json
-from pathlib import Path
 from string import Template
+
+import yaml
 
 # Define paths
 DATASETS_DIR = "_datasets"
@@ -394,10 +393,12 @@ SCHEMA_ROW_TEMPLATE = """
 </tr>
 """
 
+
 def load_dataset_config(dataset_id):
     """Load dataset configuration from YAML file."""
     with open(f"{DATASETS_DIR}/{dataset_id}.yml", 'r', encoding='utf-8') as file:
         return yaml.safe_load(file)
+
 
 def generate_stat_html(stat):
     """Generate HTML for a single stat."""
@@ -406,26 +407,28 @@ def generate_stat_html(stat):
         LABEL=stat.get('label', '')
     )
 
+
 def generate_meta_html(dataset):
     """Generate HTML for metadata items."""
     meta_items = []
-    
+
     if dataset.get('release_date'):
         meta_items.append(Template(META_ITEM_TEMPLATE).substitute(
             TEXT=f"Released: {dataset['release_date']}"
         ))
-    
+
     if dataset.get('expected_update'):
         meta_items.append(Template(META_ITEM_TEMPLATE).substitute(
             TEXT=f"Updates: {dataset['expected_update']}"
         ))
-    
+
     return ''.join(meta_items)
+
 
 def generate_publishing_links(dataset):
     """Generate HTML for publishing links."""
     links = []
-    
+
     if 'publishing' in dataset and dataset['publishing']:
         for pub in dataset['publishing']:
             if 'url' in pub and 'platform' in pub:
@@ -433,13 +436,14 @@ def generate_publishing_links(dataset):
                     URL=pub['url'],
                     PLATFORM=pub['platform'].capitalize()
                 ))
-    
+
     return ''.join(links)
+
 
 def generate_dataset_card(dataset):
     """Generate HTML for a dataset card."""
     stats_html = ''.join([generate_stat_html(stat) for stat in dataset.get('stats', [])])
-    
+
     return Template(DATASET_CARD_TEMPLATE).substitute(
         DATASET_ID=dataset['id'],
         NAME=dataset['name'],
@@ -451,6 +455,7 @@ def generate_dataset_card(dataset):
         PUBLISHING_LINKS=generate_publishing_links(dataset)
     )
 
+
 def generate_feature_html(feature):
     """Generate HTML for a feature card."""
     return Template(FEATURE_CARD_TEMPLATE).substitute(
@@ -458,6 +463,7 @@ def generate_feature_html(feature):
         TITLE=feature.get('title', ''),
         DESCRIPTION=feature.get('description', '')
     )
+
 
 def generate_schema_row_html(field):
     """Generate HTML for a schema row."""
@@ -468,15 +474,16 @@ def generate_schema_row_html(field):
         NULLABLE='Yes' if field.get('nullable') else 'No'
     )
 
+
 def generate_dataset_page(dataset):
     """Generate HTML for a dataset detail page."""
     stats_html = ''.join([generate_stat_html(stat) for stat in dataset.get('stats', [])])
     features_html = ''.join([generate_feature_html(feature) for feature in dataset.get('features', [])])
-    
+
     schema_html = ''
     if 'dataset_details' in dataset and 'schema' in dataset['dataset_details']:
         schema_html = ''.join([generate_schema_row_html(field) for field in dataset['dataset_details']['schema']])
-    
+
     return Template(DATASET_PAGE_TEMPLATE).substitute(
         DATASET_ID=dataset['id'],
         NAME=dataset['name'],
@@ -491,19 +498,20 @@ def generate_dataset_page(dataset):
         SCHEMA=schema_html
     )
 
+
 def main():
     """Main execution function."""
     print("Generating preview site...")
-    
+
     # Create output directory
     os.makedirs(OUTPUT_DIR, exist_ok=True)
-    
+
     # Copy assets
     os.makedirs(f"{OUTPUT_DIR}/assets/images", exist_ok=True)
     for file in os.listdir("assets/images"):
         if file.endswith(".svg"):
             shutil.copy(f"assets/images/{file}", f"{OUTPUT_DIR}/assets/images/{file}")
-    
+
     # Process datasets
     dataset_cards = []
     for filename in os.listdir(DATASETS_DIR):
@@ -511,28 +519,29 @@ def main():
             dataset_id = filename[:-4]  # Remove .yml extension
             try:
                 dataset = load_dataset_config(dataset_id)
-                
+
                 # Generate dataset card for index
                 dataset_cards.append(generate_dataset_card(dataset))
-                
+
                 # Generate dataset detail page
                 dataset_page = generate_dataset_page(dataset)
                 with open(f"{OUTPUT_DIR}/dataset-{dataset_id}.html", 'w', encoding='utf-8') as file:
                     file.write(dataset_page)
-                
+
                 print(f"Generated preview page for {dataset_id}")
             except Exception as e:
                 print(f"Error processing {dataset_id}: {str(e)}")
-    
+
     # Generate index page
     index_html = Template(PAGE_TEMPLATE).substitute(
         DATASET_CARDS=''.join(dataset_cards)
     )
     with open(f"{OUTPUT_DIR}/index.html", 'w', encoding='utf-8') as file:
         file.write(index_html)
-    
+
     print(f"Preview site generated in '{OUTPUT_DIR}' directory!")
     print("Open 'preview/index.html' in your browser to view the site.")
 
+
 if __name__ == "__main__":
-    main() 
+    main()

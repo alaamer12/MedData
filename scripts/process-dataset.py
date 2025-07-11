@@ -1,63 +1,57 @@
 #!/usr/bin/env python3
+"""
+MedData Process Dataset Script - Processes datasets from external sources.
+
+This script handles the downloading, loading, and processing of datasets from
+various sources like Kaggle and Hugging Face. It normalizes the data and saves
+it in a standardized format for the MedData platform.
+"""
+from __future__ import annotations
+
 import os
 import sys
-import yaml
+from typing import Dict, Any
+
 import pandas as pd
-import importlib.util
+import yaml
+from scripts.utils.printer import printer
+from scripts.utils.config_manager import config_manager
 
-# Try to import the printer, if not available fallback to simple printing
-try:
-    # Check if utils.printer is available
-    if importlib.util.find_spec("utils.printer"):
-        from utils.printer import printer
-    else:
-        # Try to import from parent directory
-        sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-        from utils.printer import printer
-except ImportError:
-    # Define a simple printer fallback with basic methods if module not found
-    class SimplePrinter:
-        def header(self, msg): print(f"\n=== {msg} ===")
-        def print(self, msg, *args): print(msg)
-        def success(self, msg): print(f"[SUCCESS] {msg}")
-        def warning(self, msg): print(f"[WARNING] {msg}")
-        def error(self, msg, e=None): 
-            print(f"[ERROR] {msg}")
-            if e: print(f"  Details: {str(e)}")
-        def guide(self, title, steps):
-            print(f"\n{title}:")
-            for i, step in enumerate(steps):
-                print(f"{i+1}. {step}")
-        def dataset_processed(self, dataset_id, stats):
-            print(f"\n[SUCCESS] Dataset '{dataset_id}' processed successfully!")
-            print("\nDataset Stats:")
-            for key, value in stats.items():
-                print(f"  {key}: {value}")
-        def smart_error(self, error_type, context=None):
-            print(f"[ERROR] {error_type}")
-            if context and 'message' in context:
-                print(f"  {context['message']}")
+__all__ = ["load_dataset_config", "process_kaggle_source", "process_huggingface_source",
+           "normalize_dataframe", "process_dataset"]
+
+
+def load_dataset_config(dataset_id: str) -> Dict[str, Any]:
+    """
+    Load dataset configuration from YAML file.
     
-    printer = SimplePrinter()
-
-def load_dataset_config(dataset_id):
-    """Load dataset configuration from YAML file."""
-    config_path = f"_datasets/{dataset_id}.yml"
-    if not os.path.exists(config_path):
+    Args:
+        dataset_id: ID of the dataset to load
+        
+    Returns:
+        Dictionary containing the dataset configuration
+        
+    Raises:
+        FileNotFoundError: If the configuration file doesn't exist
+        yaml.YAMLError: If the configuration file is not valid YAML
+        Exception: For other errors during loading
+    """
+    config_path = config_manager.paths.datasets_dir / f"{dataset_id}.yml"
+    if not config_path.exists():
         printer.smart_error("dataset_config", {
             "dataset_id": dataset_id,
-            "config_path": config_path,
+            "config_path": str(config_path),
             "message": f"Dataset configuration not found: {config_path}"
         })
         sys.exit(1)
-        
+
     try:
         with open(config_path, 'r') as file:
             return yaml.safe_load(file)
     except yaml.YAMLError as e:
         printer.smart_error("dataset_config", {
             "dataset_id": dataset_id,
-            "config_path": config_path,
+            "config_path": str(config_path),
             "message": f"Invalid YAML in configuration file: {config_path}"
         })
         printer.error("YAML parsing error", e)
@@ -66,8 +60,23 @@ def load_dataset_config(dataset_id):
         printer.error(f"Error loading dataset configuration: {config_path}", e)
         sys.exit(1)
 
-def process_kaggle_source(source_config, dataset_id):
-    """Process a Kaggle data source."""
+
+def process_kaggle_source(source_config: Dict[str, Any], dataset_id: str) -> pd.DataFrame:
+    """
+    Process a Kaggle data source.
+    
+    Args:
+        source_config: Configuration for the Kaggle source
+        dataset_id: ID of the dataset being processed
+        
+    Returns:
+        Pandas DataFrame containing the loaded data
+        
+    Raises:
+        ImportError: If the required libraries are not installed
+        ValueError: If the source configuration is invalid
+        Exception: For errors during downloading or loading
+    """
     try:
         import kaggle
         import kagglehub
@@ -77,16 +86,24 @@ def process_kaggle_source(source_config, dataset_id):
             "message": "Kaggle libraries not installed. Run: pip install kaggle kagglehub"
         })
         sys.exit(1)
-    
+
+    # Check if Kaggle token is available in config
+    if not config_manager.tokens.kaggle and not os.path.exists(os.path.expanduser('~/.kaggle/kaggle.json')):
+        printer.smart_error("missing_dependency", {
+            "dependency": "kaggle credentials",
+            "message": "Kaggle API credentials not found. Set KAGGLE_TOKEN in .env file or configure ~/.kaggle/kaggle.json"
+        })
+        sys.exit(1)
+
     if not source_config.get('dataset'):
         printer.smart_error("dataset_config", {
             "dataset_id": dataset_id,
             "message": "Kaggle dataset not specified in configuration"
         })
         sys.exit(1)
-        
+
     printer.header(f"Downloading dataset: {source_config['dataset']}")
-    
+
     try:
         # Try using kagglehub first
         dataset_path = kagglehub.dataset_download(source_config['dataset'])
@@ -95,23 +112,23 @@ def process_kaggle_source(source_config, dataset_id):
         # Fall back to kaggle API
         printer.warning(f"KaggleHub download failed: {str(e)}")
         printer.print("Falling back to Kaggle API...")
-        
+
         # Parse username and dataset slug
         username, dataset_slug = source_config['dataset'].split('/')
-        
+
         # Set download path
-        download_path = f"_data/raw/{dataset_id}/kaggle"
-        os.makedirs(download_path, exist_ok=True)
-        
+        download_path = config_manager.paths.raw_data_dir / dataset_id / "kaggle"
+        download_path.mkdir(exist_ok=True, parents=True)
+
         try:
             # Download dataset
             kaggle.api.authenticate()
             kaggle.api.dataset_download_files(
                 source_config['dataset'],
-                path=download_path,
+                path=str(download_path),
                 unzip=True
             )
-            dataset_path = download_path
+            dataset_path = str(download_path)
             printer.success(f"Downloaded to: {dataset_path}")
         except Exception as nested_e:
             printer.smart_error("network", {
@@ -119,7 +136,7 @@ def process_kaggle_source(source_config, dataset_id):
                 "message": f"Failed to download dataset: {str(nested_e)}"
             })
             sys.exit(1)
-    
+
     # Load data file
     file_path = os.path.join(dataset_path, source_config['file'])
     if not os.path.exists(file_path):
@@ -127,7 +144,7 @@ def process_kaggle_source(source_config, dataset_id):
         for root, dirs, files in os.walk(dataset_path):
             for file in files:
                 available_files.append(os.path.join(root, file))
-                
+
         printer.smart_error("missing_file", {
             "path": file_path,
             "message": f"Data file not found: {file_path}"
@@ -138,7 +155,7 @@ def process_kaggle_source(source_config, dataset_id):
         if len(available_files) > 10:
             printer.print(f"  ... and {len(available_files) - 10} more")
         sys.exit(1)
-    
+
     # Determine file format and load
     if file_path.endswith('.csv'):
         try:
@@ -163,8 +180,23 @@ def process_kaggle_source(source_config, dataset_id):
         })
         sys.exit(1)
 
-def process_huggingface_source(source_config, dataset_id):
-    """Process a Hugging Face data source."""
+
+def process_huggingface_source(source_config: Dict[str, Any], dataset_id: str) -> pd.DataFrame:
+    """
+    Process a Hugging Face data source.
+    
+    Args:
+        source_config: Configuration for the Hugging Face source
+        dataset_id: ID of the dataset being processed
+        
+    Returns:
+        Pandas DataFrame containing the loaded data
+        
+    Raises:
+        ImportError: If the required libraries are not installed
+        ValueError: If the source configuration is invalid
+        Exception: For errors during downloading or loading
+    """
     try:
         from datasets import load_dataset
     except ImportError:
@@ -173,16 +205,22 @@ def process_huggingface_source(source_config, dataset_id):
             "message": "Hugging Face datasets library not installed. Run: pip install datasets"
         })
         sys.exit(1)
-    
+
+    # Check if Hugging Face token is available in config
+    if config_manager.tokens.huggingface:
+        # Set token for huggingface_hub
+        os.environ['HUGGINGFACE_TOKEN'] = config_manager.tokens.huggingface
+        printer.success("Using Hugging Face token from configuration")
+
     if not source_config.get('dataset'):
         printer.smart_error("dataset_config", {
             "dataset_id": dataset_id,
             "message": "Hugging Face dataset not specified in configuration"
         })
         sys.exit(1)
-        
+
     printer.header(f"Loading dataset: {source_config['dataset']}")
-    
+
     try:
         dataset = load_dataset(source_config['dataset'])
         df = dataset["train"].to_pandas()
@@ -195,28 +233,37 @@ def process_huggingface_source(source_config, dataset_id):
         })
         sys.exit(1)
 
-def normalize_dataframe(df):
-    """Apply common normalization to a dataframe."""
-    printer.header("Normalizing dataframe")
+
+def normalize_dataframe(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Apply common normalization to a dataframe.
     
+    Args:
+        df: Input DataFrame to normalize
+        
+    Returns:
+        Normalized DataFrame with duplicates and null values removed
+    """
+    printer.header("Normalizing dataframe")
+
     original_shape = df.shape
     printer.print(f"Shape before: {original_shape}")
     printer.print(f"Columns: {df.columns.tolist()}")
-    
+
     # Handle common text column names
     text_col = None
     for potential_col in ['text', 'Text', 'content', 'Content', 'body', 'Body']:
         if potential_col in df.columns:
             text_col = potential_col
             break
-    
+
     if text_col:
         # Drop rows with null text values
         null_count = df[text_col].isna().sum()
         if null_count > 0:
             printer.print(f"Dropping {null_count} rows with null {text_col}")
             df = df[df[text_col].notna()]
-        
+
         # Drop duplicate rows based on the text column
         duplicate_count = df.duplicated(subset=[text_col]).sum()
         if duplicate_count > 0:
@@ -224,25 +271,39 @@ def normalize_dataframe(df):
             df.drop_duplicates(subset=[text_col], keep='first', inplace=True)
     else:
         printer.warning("No text column found for normalization")
-    
+
     new_shape = df.shape
     printer.print(f"Shape after: {new_shape}")
-    
+
     # Calculate changes
     rows_removed = original_shape[0] - new_shape[0]
     percent_change = (rows_removed / original_shape[0]) * 100 if original_shape[0] > 0 else 0
-    
+
     if rows_removed > 0:
         printer.print(f"Removed {rows_removed} rows ({percent_change:.2f}%)")
-    
+
     return df
 
-def process_dataset(dataset_id):
-    """Process a dataset according to its configuration."""
+
+def process_dataset(dataset_id: str) -> None:
+    """
+    Process a dataset according to its configuration.
+    
+    Args:
+        dataset_id: ID of the dataset to process
+        
+    Raises:
+        FileNotFoundError: If the configuration file doesn't exist
+        ValueError: If the source configuration is invalid
+        Exception: For errors during processing or saving
+    """
+    # Ensure directories exist
+    config_manager.ensure_directories_exist()
+
     # Load dataset configuration
     config = load_dataset_config(dataset_id)
     printer.header(f"Processing dataset: {config['name']}")
-    
+
     # Check for sources
     if not config.get('sources'):
         printer.smart_error("dataset_config", {
@@ -250,14 +311,14 @@ def process_dataset(dataset_id):
             "message": "No data sources specified in configuration"
         })
         sys.exit(1)
-    
+
     # Process each source
     combined_df = pd.DataFrame()
-    
+
     for source in config['sources']:
         platform = source.get('platform')
         printer.header(f"Processing source: {platform}")
-        
+
         try:
             if platform == 'kaggle':
                 df = process_kaggle_source(source, dataset_id)
@@ -266,11 +327,11 @@ def process_dataset(dataset_id):
             else:
                 printer.warning(f"Unknown platform: {platform}")
                 continue
-            
+
             # Normalize dataframe
             printer.header(f"Normalizing data from {platform}")
             df = normalize_dataframe(df)
-            
+
             # Combine dataframes
             if combined_df.empty:
                 combined_df = df
@@ -283,43 +344,44 @@ def process_dataset(dataset_id):
             if platform == 'kaggle':
                 printer.guide("Kaggle Authentication", [
                     "Make sure your Kaggle API credentials are set up correctly",
-                    "Create a kaggle.json file with your API credentials",
+                    "Add KAGGLE_TOKEN to your .env file",
+                    "Or create a kaggle.json file with your API credentials",
                     "Place it in ~/.kaggle/ directory or set KAGGLE_CONFIG_DIR environment variable"
                 ])
             continue
-    
+
     if combined_df.empty:
         printer.error("No data was processed. Check your source configurations.")
         sys.exit(1)
-    
+
     # Save processed dataset
-    output_dir = f"_data/processed/{dataset_id}"
+    output_dir = config_manager.paths.processed_data_dir / dataset_id
     try:
-        os.makedirs(output_dir, exist_ok=True)
-        
+        output_dir.mkdir(exist_ok=True, parents=True)
+
         # Save as parquet
-        parquet_path = f"{output_dir}/data.parquet"
-        combined_df.to_parquet(parquet_path, index=False)
-        
+        parquet_path = output_dir / "data.parquet"
+        combined_df.to_parquet(str(parquet_path), index=False)
+
         # Save a sample as CSV for inspection
         sample_size = min(1000, len(combined_df))
-        sample_path = f"{output_dir}/sample.csv"
-        combined_df.sample(sample_size).to_csv(sample_path, index=False)
-        
+        sample_path = output_dir / "sample.csv"
+        combined_df.sample(sample_size).to_csv(str(sample_path), index=False)
+
         # Prepare stats
         stats = {
             "Total rows": len(combined_df),
             "Columns": len(combined_df.columns),
-            "File size": f"{os.path.getsize(parquet_path) / (1024 * 1024):.2f} MB",
-            "Column names": ", ".join(combined_df.columns.tolist()[:5]) + 
-                          (", ..." if len(combined_df.columns) > 5 else ""),
-            "Sample path": sample_path,
-            "Parquet path": parquet_path
+            "File size": f"{parquet_path.stat().st_size / (1024 * 1024):.2f} MB",
+            "Column names": ", ".join(combined_df.columns.tolist()[:5]) +
+                            (", ..." if len(combined_df.columns) > 5 else ""),
+            "Sample path": str(sample_path),
+            "Parquet path": str(parquet_path)
         }
-        
+
         # Print success message with stats
         printer.dataset_processed(dataset_id, stats)
-        
+
         # Update stats in configuration file suggestion
         printer.guide("Next Steps", [
             f"Run 'python meddata.py generate-docs {dataset_id}' to generate documentation",
@@ -329,7 +391,7 @@ def process_dataset(dataset_id):
             f"  - value: {len(combined_df.columns)}",
             f"    label: Fields"
         ])
-        
+
     except PermissionError as e:
         printer.error("Permission denied when saving processed dataset", e)
         sys.exit(1)
@@ -337,10 +399,11 @@ def process_dataset(dataset_id):
         printer.error("Error saving processed dataset", e)
         sys.exit(1)
 
+
 if __name__ == "__main__":
     if len(sys.argv) < 2:
         printer.error("Usage: python process-dataset.py <dataset_id>")
         printer.guide("Example", ["python process-dataset.py medium"])
         sys.exit(1)
-    
-    process_dataset(sys.argv[1]) 
+
+    process_dataset(sys.argv[1])

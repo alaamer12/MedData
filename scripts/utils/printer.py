@@ -6,13 +6,17 @@ This module provides a robust printing utility that enhances terminal output
 using the rich library. It supports various message formats and displays
 helpful, informative error messages.
 """
+from __future__ import annotations
 
-from typing import Any, List, Optional, Dict
-import sys
 import os
 import platform
+import sys
 import textwrap
 from datetime import datetime
+from types import TracebackType
+from typing import Any, Dict, List, Optional, Union, Type, TypeVar
+
+from typing_extensions import Literal
 
 try:
     from rich.console import Console
@@ -23,9 +27,42 @@ try:
     from rich.progress import Progress, SpinnerColumn, TextColumn
     from rich.traceback import install as install_rich_traceback
     from rich.theme import Theme
+
     HAS_RICH = True
 except ImportError:
     HAS_RICH = False
+
+__all__ = ["printer", "Printer"]
+
+MessageType = Literal["info", "success", "warning", "error", "guide", "header"]
+ErrorType = Literal[
+    "missing_file", "permission", "network", "missing_dependency", "dataset_config", "dataset_processing"]
+
+# Type variable for the progress context
+T = TypeVar('T', bound='Progress')
+
+
+# Return a simple context manager when rich is not available
+class DummyProgress:
+    def __init__(self, description):
+        self.description = description
+
+    def __enter__(self) -> 'DummyProgress':
+        print(f"{self.description}...")
+        return self
+
+    def __exit__(self, exc_type: Optional[Type[BaseException]],
+                 exc_val: Optional[BaseException],
+                 exc_tb: Optional[TracebackType]) -> None:
+        print("Done!")
+
+    @staticmethod
+    def add_task(description: str, total: Optional[int] = None) -> int:
+        return 0
+
+    def update(self, task_id: int, advance: int = 1,
+               description: Optional[str] = None) -> None:
+        pass
 
 
 class Printer:
@@ -34,10 +71,15 @@ class Printer:
     
     This class provides methods for printing messages with different formats,
     displaying guides and error messages in a user-friendly way.
-    """
     
+    Attributes:
+        debug_mode (bool): Whether debug mode is enabled for more detailed output
+        use_rich (bool): Whether rich formatting is available and enabled
+        console (Optional[Console]): Rich console instance if available
+    """
+
     # ASCII art for MEDDATA logo
-    MEDDATA_ASCII = """
+    MEDDATA_ASCII: str = """
     ███╗   ███╗███████╗██████╗ ██████╗  █████╗ ████████╗ █████╗ 
     ████╗ ████║██╔════╝██╔══██╗██╔══██╗██╔══██╗╚══██╔══╝██╔══██╗
     ██╔████╔██║█████╗  ██║  ██║██║  ██║███████║   ██║   ███████║
@@ -47,9 +89,9 @@ class Printer:
                                                                  
     Engineering Hub
     """
-    
+
     # Color theme for console output
-    MEDDATA_THEME = {
+    MEDDATA_THEME: Dict[str, str] = {
         "info": "cyan",
         "warning": "yellow",
         "danger": "bold red",
@@ -62,8 +104,8 @@ class Printer:
         "path": "italic cyan",
         "date": "magenta",
     }
-    
-    def __init__(self, use_rich: bool = True, debug: bool = False):
+
+    def __init__(self, use_rich: bool = True, debug: bool = False) -> None:
         """
         Initialize the Printer.
         
@@ -71,14 +113,14 @@ class Printer:
             use_rich: Whether to use rich formatting (if available)
             debug: Enable debug mode for more detailed output
         """
-        self.debug_mode = debug
-        self.use_rich = use_rich and HAS_RICH
-        
+        self.debug_mode: bool = debug
+        self.use_rich: bool = use_rich and HAS_RICH
+
         if self.use_rich:
             # Setup rich with our custom theme
             custom_theme = Theme(self.MEDDATA_THEME)
-            self.console = Console(theme=custom_theme)
-            
+            self.console: Optional[Console] = Console(theme=custom_theme)
+
             # Install rich traceback handler for better error display
             if debug:
                 install_rich_traceback(show_locals=True)
@@ -86,12 +128,13 @@ class Printer:
                 install_rich_traceback(show_locals=False)
         else:
             # Fallback mode if rich is not available
-            self.console = None
-        
+            self.console: Optional[Console] = None
+
         # Handle character encoding issues
         self._setup_encoding()
-    
-    def _setup_encoding(self) -> None:
+
+    @staticmethod
+    def _setup_encoding() -> None:
         """Configure terminal encoding to handle special characters properly."""
         if platform.system() == "Windows":
             # Fix common encoding issues on Windows
@@ -100,14 +143,23 @@ class Printer:
                 if sys.stdout.encoding != 'utf-8':
                     if hasattr(sys.stdout, 'reconfigure'):
                         sys.stdout.reconfigure(encoding='utf-8')
-                    elif hasattr(sys.stdout, 'encoding'):
-                        sys.stdout.encoding = 'utf-8'
+                    # elif hasattr(sys.stdout, 'encoding'):
             except Exception:
                 # Fallback if reconfigure is not available
                 os.environ['PYTHONIOENCODING'] = 'utf-8'
-    
-    def _format_plain(self, message: str, msg_type: str = "info") -> str:
-        """Format a message for plain text output (no rich formatting)."""
+
+    @staticmethod
+    def _format_plain(message: str, msg_type: MessageType = "info") -> str:
+        """
+        Format a message for plain text output (no rich formatting).
+        
+        Args:
+            message: The message to format
+            msg_type: Type of message for appropriate formatting
+            
+        Returns:
+            Formatted message string
+        """
         prefix = {
             "info": "[INFO] ",
             "success": "[SUCCESS] ",
@@ -116,14 +168,14 @@ class Printer:
             "guide": "[GUIDE] ",
             "header": "=== ",
         }.get(msg_type, "")
-        
+
         suffix = {
             "header": " ===",
         }.get(msg_type, "")
-        
+
         return f"{prefix}{message}{suffix}"
-    
-    def print(self, message: str, msg_type: str = "info") -> None:
+
+    def print(self, message: str, msg_type: MessageType = "info") -> None:
         """
         Print a message with appropriate formatting.
         
@@ -135,7 +187,7 @@ class Printer:
             self.console.print(message, style=msg_type)
         else:
             print(self._format_plain(message, msg_type))
-    
+
     def header(self, message: str, width: int = 80) -> None:
         """
         Print a header message.
@@ -150,15 +202,25 @@ class Printer:
             print("\n" + "=" * width)
             print(self._format_plain(message, "header"))
             print("=" * width)
-    
+
     def success(self, message: str) -> None:
-        """Print a success message."""
+        """
+        Print a success message.
+        
+        Args:
+            message: The success message to display
+        """
         self.print(message, "success")
-    
+
     def warning(self, message: str) -> None:
-        """Print a warning message."""
+        """
+        Print a warning message.
+        
+        Args:
+            message: The warning message to display
+        """
         self.print(message, "warning")
-    
+
     def error(self, message: str, exception: Optional[Exception] = None) -> None:
         """
         Print an error message with optional exception details.
@@ -169,13 +231,13 @@ class Printer:
         """
         if self.use_rich:
             self.console.print(Panel(
-                f"{message}\n\n" + 
+                f"{message}\n\n" +
                 (f"[italic]{str(exception)}[/italic]" if exception else ""),
                 title="[danger]ERROR",
                 border_style="danger",
                 expand=False
             ))
-            
+
             # Show exception traceback in debug mode
             if exception and self.debug_mode:
                 self.console.print_exception(show_locals=True)
@@ -183,7 +245,7 @@ class Printer:
             print(f"\n{self._format_plain(message, 'error')}")
             if exception:
                 print(f"  → {str(exception)}")
-    
+
     def guide(self, title: str, steps: List[str]) -> None:
         """
         Print a user guide with steps.
@@ -193,7 +255,7 @@ class Printer:
             steps: List of steps to display
         """
         if self.use_rich:
-            guide_content = "\n".join(f"{i+1}. {step}" for i, step in enumerate(steps))
+            guide_content = "\n".join(f"{i + 1}. {step}" for i, step in enumerate(steps))
             self.console.print(Panel(
                 guide_content,
                 title=f"[guide]{title}",
@@ -203,8 +265,8 @@ class Printer:
         else:
             print(f"\n{self._format_plain(title, 'guide')}")
             for i, step in enumerate(steps):
-                print(f"  {i+1}. {step}")
-    
+                print(f"  {i + 1}. {step}")
+
     def code(self, code: str, language: str = "python") -> None:
         """
         Print code with syntax highlighting.
@@ -219,7 +281,7 @@ class Printer:
             print("\n--- Code ---")
             print(textwrap.indent(code, "  "))
             print("------------")
-    
+
     def file_path(self, path: str, exists: bool = True) -> None:
         """
         Print a file path with existence indicator.
@@ -234,7 +296,7 @@ class Printer:
         else:
             icon = "[EXISTS]" if exists else "[NOT FOUND]"
             print(f"{icon} {path}")
-    
+
     def table(self, columns: List[str], rows: List[List[str]], title: Optional[str] = None) -> None:
         """
         Print a table of information.
@@ -248,29 +310,29 @@ class Printer:
             table = Table(title=title)
             for column in columns:
                 table.add_column(column)
-            
+
             for row in rows:
                 table.add_row(*row)
-            
+
             self.console.print(table)
         else:
             if title:
                 print(f"\n{title}")
-            
+
             # Simple ASCII table
-            col_widths = [max(len(col), max((len(row[i]) for row in rows), default=0)) 
-                         for i, col in enumerate(columns)]
-            
+            col_widths = [max(len(col), max((len(row[i]) for row in rows), default=0))
+                          for i, col in enumerate(columns)]
+
             # Header
             header = " | ".join(col.ljust(width) for col, width in zip(columns, col_widths))
             print(header)
             print("-" * len(header))
-            
+
             # Rows
             for row in rows:
                 print(" | ".join(cell.ljust(width) for cell, width in zip(row, col_widths)))
-    
-    def progress_context(self, description: str = "Processing"):
+
+    def progress_context(self, description: str = "Processing") -> Union[Progress, 'DummyProgress']:
         """
         Create a progress context for tracking operations.
         
@@ -288,23 +350,9 @@ class Printer:
                 console=self.console
             )
         else:
-            # Return a simple context manager when rich is not available
-            class DummyProgress:
-                def __enter__(self):
-                    print(f"{description}...")
-                    return self
-                
-                def __exit__(self, exc_type, exc_val, exc_tb):
-                    print("Done!")
-                
-                def add_task(self, description, total=None):
-                    return 0
-                
-                def update(self, task_id, advance=1, description=None):
-                    pass
-            
-            return DummyProgress()
-    
+
+            return DummyProgress(description)
+
     def dataset_created(self, dataset_id: str, config_path: str) -> None:
         """
         Print a success message for dataset creation with next steps guide.
@@ -321,7 +369,7 @@ class Printer:
                 border_style="success",
                 expand=False
             ))
-            
+
             # Guide for next steps
             next_steps = [
                 f"Edit [path]{config_path}[/path] to customize dataset properties",
@@ -331,9 +379,9 @@ class Printer:
                 f"Run [code]python meddata.py process {dataset_id}[/code] to process your dataset",
                 f"Run [code]python meddata.py docs {dataset_id}[/code] to generate documentation"
             ]
-            
+
             self.console.print(Panel(
-                "\n".join(f"{i+1}. {step}" for i, step in enumerate(next_steps)),
+                "\n".join(f"{i + 1}. {step}" for i, step in enumerate(next_steps)),
                 title="Next Steps",
                 border_style="guide",
                 expand=False
@@ -348,7 +396,7 @@ class Printer:
             print(f"4. Create dataset page: dataset/{dataset_id}/index.md")
             print(f"5. Run 'python meddata.py process {dataset_id}' to process your dataset")
             print(f"6. Run 'python meddata.py docs {dataset_id}' to generate documentation")
-    
+
     def dataset_processed(self, dataset_id: str, stats: Dict[str, Any]) -> None:
         """
         Print a success message for dataset processing with statistics.
@@ -362,24 +410,24 @@ class Printer:
             stats_table = Table(show_header=True)
             stats_table.add_column("Metric")
             stats_table.add_column("Value")
-            
+
             for key, value in stats.items():
                 stats_table.add_row(key, str(value))
-            
+
             self.console.print(Panel(
                 f"[success]Dataset [bold]{dataset_id}[/bold] processed successfully![/success]\n",
                 title="Dataset Processed",
                 border_style="success",
                 expand=False
             ))
-            
+
             self.console.print(Panel(stats_table, title="Dataset Statistics"))
         else:
             print(f"\n[SUCCESS] Dataset '{dataset_id}' processed successfully!")
             print("\nDataset Statistics:")
             for key, value in stats.items():
                 print(f"  {key}: {value}")
-    
+
     def dataset_published(self, dataset_id: str, platforms: List[str], urls: List[str]) -> None:
         """
         Print a success message for dataset publishing with platform URLs.
@@ -394,42 +442,42 @@ class Printer:
             urls_table = Table(show_header=True)
             urls_table.add_column("Platform")
             urls_table.add_column("URL")
-            
+
             for platform, url in zip(platforms, urls):
                 urls_table.add_row(platform, url)
-            
+
             self.console.print(Panel(
                 f"[success]Dataset [bold]{dataset_id}[/bold] published successfully![/success]\n",
                 title="Dataset Published",
                 border_style="success",
                 expand=False
             ))
-            
+
             self.console.print(Panel(urls_table, title="Access URLs"))
         else:
             print(f"\n[SUCCESS] Dataset '{dataset_id}' published successfully!")
             print("\nAccess URLs:")
             for platform, url in zip(platforms, urls):
                 print(f"  {platform}: {url}")
-    
+
     def logo(self) -> None:
         """Display the MEDDATA ASCII logo."""
         if self.use_rich:
             self.console.print(self.MEDDATA_ASCII, style="primary")
         else:
             print(self.MEDDATA_ASCII)
-    
+
     def timestamp(self) -> None:
         """Print the current timestamp."""
         now = datetime.now()
         timestamp = now.strftime("%Y-%m-%d %H:%M:%S")
-        
+
         if self.use_rich:
             self.console.print(f"[date]{timestamp}[/date]")
         else:
             print(timestamp)
-    
-    def smart_error(self, error_type: str, context: Dict[str, Any] = None) -> None:
+
+    def smart_error(self, error_type: ErrorType, context: Optional[Dict[str, Any]] = None) -> None:
         """
         Display a smart error message based on error type and context.
         
@@ -438,8 +486,8 @@ class Printer:
             context: Dictionary with context information
         """
         context = context or {}
-        
-        error_templates = {
+
+        error_templates: Dict[ErrorType, tuple[str, str, List[str]]] = {
             "missing_file": (
                 "File not found",
                 f"The file [path]{context.get('path', 'unknown')}[/path] does not exist.",
@@ -493,7 +541,7 @@ class Printer:
                 ]
             )
         }
-        
+
         if error_type not in error_templates:
             # Generic error
             title = "Error occurred"
@@ -504,7 +552,7 @@ class Printer:
             ]
         else:
             title, message, solutions = error_templates[error_type]
-        
+
         if self.use_rich:
             self.console.print(Panel(
                 f"{message}\n\n[guide]Possible solutions:[/guide]",
@@ -512,15 +560,16 @@ class Printer:
                 border_style="danger",
                 expand=False
             ))
-            
+
             for i, solution in enumerate(solutions):
-                self.console.print(f"  {i+1}. {solution}")
+                self.console.print(f"  {i + 1}. {solution}")
         else:
             print(f"\n[ERROR] {title}")
             print(f"  {message}")
             print("\nPossible solutions:")
             for i, solution in enumerate(solutions):
-                print(f"  {i+1}. {solution}")
+                print(f"  {i + 1}. {solution}")
+
 
 # Initialize a global printer instance for easy import
 printer = Printer()
@@ -529,35 +578,35 @@ printer = Printer()
 if __name__ == "__main__":
     print("MedData Printer Demo")
     print("-------------------")
-    
+
     # Create a printer instance
     p = Printer()
-    
+
     # Show logo
     p.logo()
-    
+
     # Examples of different message types
     p.header("MedData Printer Demo")
     p.print("This is a regular info message")
     p.success("Operation completed successfully!")
     p.warning("This might cause issues")
-    
+
     # Show an error
     p.error("Something went wrong", Exception("Invalid configuration"))
-    
+
     # Smart error
     p.smart_error("missing_file", {"path": "config.yml"})
-    
+
     # Guide
     p.guide("Getting Started", [
         "Install dependencies with pip install -r requirements.txt",
         "Configure your settings in config.yml",
         "Run the application with python app.py"
     ])
-    
+
     # Code example
     p.code("def hello():\n    print('Hello, world!')")
-    
+
     # Table example
     p.table(
         ["Dataset", "Size", "Status"],
@@ -567,18 +616,18 @@ if __name__ == "__main__":
         ],
         title="Available Datasets"
     )
-    
+
     # Example of dataset operations
     p.dataset_created("example", "_datasets/example.yml")
-    
+
     p.dataset_processed("example", {
         "Total rows": 10000,
         "Fields": 15,
         "Size": "25MB"
     })
-    
+
     p.dataset_published(
         "example",
         ["Hugging Face", "GitHub"],
         ["https://huggingface.co/datasets/example", "https://github.com/example/dataset"]
-    ) 
+    )
