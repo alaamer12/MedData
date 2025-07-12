@@ -1,11 +1,11 @@
-# Medium Articles Dataset
+# {{dataset_name}} Dataset Card
 
 ## Dataset Description
 
-This dataset contains articles from Medium, focusing on various topics and publications.
+{{dataset_summary}}
 
-### Features
-- id: Unique identifier for each article
+### Features / Data Fields
+- {{field_1}}: description
 - title: The title of the article
 - text: The main content of the article
 - url: The URL where the article was published
@@ -26,8 +26,8 @@ api.authenticate()
 If you use this dataset, please cite:
 
 ```
-@dataset{medium_articles_2025,
-  author = {MedData Project},
+@dataset{{dataset_id}},
+  author = {{author}},},{
   title = {Medium Articles Dataset},
   year = {2025},
   publisher = {Kaggle},

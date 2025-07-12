@@ -1,23 +1,33 @@
 # {{dataset_name}}
 
-Welcome to the **{{dataset_name}}** dataset published on Kaggle!
+Welcome to the **{{dataset_name}}** dataset.
 
-## Overview
-Provide a summary of the dataset, including its purpose, origin, and key statistics.
+_This is a generic Kaggle README template – replace all `{{ }}` placeholders with real values._
 
-## Structure
-Explain the directory/file structure and what each file represents.
+## Dataset Summary
 
-## Getting Started
+{{dataset_summary}}
+
+## Files & Structure
+
+Describe directory layout and the purpose of each file.
+
+## Usage Example
+
 ```python
 import pandas as pd
 
-df = pd.read_parquet("data.parquet")
+# adjust path / loader to your dataset format
+path = "data/{{some_file}}"
+df = pd.read_parquet(path)
 print(df.head())
 ```
 
-## License
-Refer to the `LICENSE` file for terms of use.
+## License & Citation
+
+Distributed under **{{license}}**. See `LICENSE` for full text.
+
+If you publish work that uses this dataset, please cite it (see `CITATION.cff`).
 
 ## Citation
 If you use this dataset, please cite it as follows:

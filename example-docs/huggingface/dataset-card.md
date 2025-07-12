@@ -1,14 +1,14 @@
-# Medium Articles Dataset
+# {{dataset_name}} Dataset Card
 
 ## Dataset Description
 
 ### Dataset Summary
 
-This dataset is a comprehensive collection of Medium articles, combining and normalizing data from multiple sources on both Kaggle and Hugging Face. The dataset ensures uniqueness of articles by removing duplicates based on article text content.
+{{dataset_summary}}
 
 ### Languages
 
-The dataset primarily contains articles in English.
+List languages represented in the dataset (e.g., English, Arabic).
 
 ### Dataset Structure
 
@@ -30,18 +30,15 @@ This dataset was created by combining and normalizing multiple existing datasets
 
 ### Source Data
 
-#### Kaggle Sources:
-- aiswaryaramachandran/medium-articles-with-content
-- hsankesara/medium-articles
-- meruvulikith/1300-towards-datascience-medium-articles-dataset
+#### Source Data
+- {{source_1}}
+- {{source_2}}
 
-#### Hugging Face Sources:
-- fabiochiu/medium-articles
-- Falah/medium_articles_posts
+
 
 ### Licensing Information
 
-This dataset is released under MIT License.
+Distributed under **{{license}}**. See `LICENSE` file.
 
 ### Citation Information
 
