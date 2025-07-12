@@ -32,21 +32,21 @@ description: A premier data engineering hub providing comprehensive datasets for
     <div class="feature-grid">
       <div class="feature-card reveal">
         <div class="feature-icon-wrapper">
-          <span class="feature-icon">✨</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feature-icon"><polyline points="20 6 9 17 4 12"></polyline></svg>
         </div>
         <h3>Data Quality</h3>
         <p>Clean, normalized data with rich metadata and regular updates. Our datasets undergo thorough quality assurance checks to ensure reliability and accuracy.</p>
       </div>
       <div class="feature-card reveal">
         <div class="feature-icon-wrapper">
-          <span class="feature-icon">🤗</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feature-icon"><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7"></path><path d="M18 12h-5V7"></path><path d="M18 7l5 5-5 5"></path></svg>
         </div>
         <h3>Easy Integration</h3>
         <p>Fully compatible with Hugging Face's datasets library and the Python ecosystem for seamless integration into your machine learning projects.</p>
       </div>
       <div class="feature-card reveal">
         <div class="feature-icon-wrapper">
-          <span class="feature-icon">📚</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feature-icon"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
         </div>
         <h3>Comprehensive Documentation</h3>
         <p>Detailed documentation with usage examples, best practices, and API references to get you started quickly and efficiently.</p>
@@ -86,4 +86,3 @@ description: A premier data engineering hub providing comprehensive datasets for
     </div>
   </div>
 </section>
-
