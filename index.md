@@ -7,7 +7,7 @@ description: A premier data engineering hub providing comprehensive datasets for
 <section id="datasets" class="datasets">
   <div class="container">
     <div class="section-header">
-      <h2>Available Datasets [_blank 4]</h2>
+      <h2>Available Datasets [_blank 5]</h2>
       <p class="section-subtitle">Explore our curated collection of high-quality datasets</p>
     </div>
     <div class="dataset-grid">
@@ -87,15 +87,3 @@ description: A premier data engineering hub providing comprehensive datasets for
   </div>
 </section>
 
-<section class="cta-section">
-  <div class="container">
-    <div class="cta-content">
-      <h2>Ready to Get Started?</h2>
-      <p>Join thousands of researchers and data scientists using our datasets to power their next breakthrough.</p>
-      <div class="cta-buttons">
-        <a href="#datasets" class="btn btn-primary">Browse Datasets</a>
-        <a href="/about/" class="btn btn-secondary">Learn More</a>
-      </div>
-    </div>
-  </div>
-</section>
