@@ -21,6 +21,27 @@ from scripts.utils.config_manager import config_manager
 __all__ = ["main", "create_parser"]
 
 
+def _copy_template_file(dataset_id: str, dataset_dir: Path, relative_path: Path) -> None:
+    """Copy a template file from example-docs replacing placeholders."""
+    template_root = config_manager.paths.project_root / "example-docs"
+    template_path = None
+    for plat in ["huggingface", "kaggle"]:
+        cand = template_root / plat / relative_path
+        if cand.exists():
+            template_path = cand
+            break
+    if not template_path:
+        printer.warning(f"No template found for {relative_path}")
+        return
+
+    target_path = dataset_dir / relative_path
+    target_path.parent.mkdir(parents=True, exist_ok=True)
+    content = template_path.read_text(encoding="utf-8")
+    content = re.sub(r"example", dataset_id, content, flags=re.IGNORECASE)
+    target_path.write_text(content, encoding="utf-8")
+    printer.file_path(str(target_path))
+
+
 def init_dataset(args: argparse.Namespace) -> None:
     """
     Initialize a new dataset.
@@ -38,6 +59,22 @@ def init_dataset(args: argparse.Namespace) -> None:
             cmd[0], cmd[1:],
             check=True
         )
+
+        # Optionally generate documentation files
+        doc_flags = {
+            "LICENSE": args.license,
+            "CHANGELOG.md": args.changelog,
+            "CITATION.cff": args.citation,
+            "dataset-card.md": args.ds_card,
+            "CONTRIBUTING.md": args.contributing,
+            "README.md": args.readme,
+        }
+        to_generate = [Path(fname) for fname, enabled in doc_flags.items() if enabled]
+        if to_generate:
+            printer.header("Generating selected documentation templates")
+            dataset_dir = config_manager.paths.project_root / "dataset" / args.id
+            for rel in to_generate:
+                _copy_template_file(args.id, dataset_dir, rel)
 
         printer.success(f"Dataset '{args.id}' initialized successfully!")
     except subprocess.CalledProcessError as e:
@@ -369,6 +406,14 @@ def _create_init_commands(subparsers) -> None:
     init_parser.add_argument("id", help="Dataset ID (e.g., 'kaggle')")
     init_parser.add_argument("name", help="Dataset name (e.g., 'Kaggle Articles')")
     init_parser.add_argument("description", help="Short dataset description")
+
+    # Optional doc generation flags
+    init_parser.add_argument("--license", action="store_true", help="Generate LICENSE file")
+    init_parser.add_argument("--changelog", action="store_true", help="Generate CHANGELOG.md file")
+    init_parser.add_argument("--citation", action="store_true", help="Generate CITATION.cff file")
+    init_parser.add_argument("--ds-card", dest="ds_card", action="store_true", help="Generate dataset-card.md file")
+    init_parser.add_argument("--contributing", action="store_true", help="Generate CONTRIBUTING.md file")
+    init_parser.add_argument("--readme", action="store_true", help="Generate README.md file")
     init_parser.set_defaults(func=init_dataset)
 
 
