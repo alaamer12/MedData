@@ -119,6 +119,26 @@
     background-color: #334155;
 }
 
+[data-theme='dark'] .features {
+  background-color: var(--background-dark);
+}
+
+[data-theme='dark'] .dataset-page .features {
+  background-color: var(--background-dark);
+}
+
+[data-theme='dark'] .metadata-section {
+  background-color: var(--background-dark);
+}
+
+[data-theme='dark'] .schema-table-wrapper {
+  background-color: var(--background-dark);
+}
+
+[data-theme='dark'] .schema-table th {
+  background-color: var(--background-light);
+}
+
 /* Custom Scrollbar Styles */
 ::-webkit-scrollbar {
   width: 12px;

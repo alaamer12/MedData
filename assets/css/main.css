@@ -808,22 +808,7 @@ footer {
   -webkit-text-fill-color: transparent;
 }
 
-/* Call to Action Section */
-.cta-section {
-  padding: var(--spacing-xxl) 0;
-  text-align: center;
-  background: linear-gradient(135deg, var(--background-light), white);
-  border-radius: var(--radius-lg);
-  margin: var(--spacing-xxl) 0;
-}
 
-.cta-buttons {
-  display: flex;
-  gap: var(--spacing-md);
-  justify-content: center;
-  margin-top: var(--spacing-lg);
-  flex-wrap: wrap;
-}
 
 /* Dataset Page */
 .dataset-header {
