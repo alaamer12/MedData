@@ -11,6 +11,7 @@ import argparse
 import sys
 from pathlib import Path
 import subprocess
+import re
 
 from scripts.utils.printer import printer
 from scripts.utils.subprocess_handler import subprocess_handler
@@ -180,6 +181,125 @@ def generate_site(args: argparse.Namespace) -> None:
     except subprocess.CalledProcessError as e:
         printer.error("Failed to generate site", e)
         sys.exit(1)
+
+
+def doctor_dataset(args: argparse.Namespace) -> None:
+    """Check dataset files required for publishing to Hugging Face or Kaggle.
+
+    This command ensures that all mandatory files exist before attempting to
+    publish a dataset. If files are missing it exits with a non-zero status so
+    that CI/CD pipelines can fail early.
+    """
+    dataset_id = args.id
+
+    # Determine selected platforms. If none passed, validate for both
+    check_hf = args.hf or not (args.hf or args.kg)
+    check_kg = args.kg or not (args.hf or args.kg)
+
+    printer.header(f"Running doctor for dataset: {dataset_id}")
+
+    def _auto_generate_missing_files(ds_id: str, ds_dir: Path, missing_files: list[str]) -> None:
+        """Attempt to populate missing docs using templates located in example-docs.
+        Will skip non-documentation files such as data.parquet.
+        """
+        template_root = config_manager.paths.project_root / "example-docs"
+        generated: list[str] = []
+
+        for abs_fp in missing_files:
+            target = Path(abs_fp)
+            if target.suffix == ".parquet":
+                continue  # cannot auto-generate data file
+
+            # Determine platform template folder that has the file
+            rel_path = target.relative_to(ds_dir)
+            template_path = None
+            for plat in ["huggingface", "kaggle"]:
+                cand = template_root / plat / rel_path
+                if cand.exists():
+                    template_path = cand
+                    break
+            if not template_path:
+                continue  # no template available
+
+            target.parent.mkdir(parents=True, exist_ok=True)
+            content = template_path.read_text(encoding="utf-8")
+            # simple placeholder replacements
+            content = re.sub(r"example", ds_id, content, flags=re.IGNORECASE)
+            target.write_text(content, encoding="utf-8")
+            generated.append(str(target))
+
+        if generated:
+            printer.success("Generated missing files:")
+            for fp in generated:
+                printer.file_path(fp)
+            printer.print("Please review and customise the generated templates before publishing.", "warning")
+        else:
+            printer.warning("No files were auto-generated (either not template found or only non-doc files were missing)")
+
+    # Locate dataset directory (docs) – fall back across common locations
+    candidate_dirs = [
+        config_manager.paths.project_root / "dataset" / dataset_id,
+        config_manager.paths.docs_dir / dataset_id,
+        config_manager.paths.datasets_dir / dataset_id,
+    ]
+    dataset_dir = next((p for p in candidate_dirs if p.exists()), None)
+
+    if dataset_dir is None:
+        printer.error(f"Dataset directory not found for '{dataset_id}' in expected locations.")
+        sys.exit(1)
+
+    missing: list[str] = []  # Store absolute paths of missing files
+
+    if check_hf:
+        printer.print("Checking Hugging Face requirements", "info")
+        hf_required = ["README.md", "dataset-card.md", "CITATION.cff", "LICENSE", "CHANGELOG.md"]
+        for rel in hf_required:
+            path = dataset_dir / rel
+            if not path.exists():
+                missing.append(str(path))
+
+        # Processed data required for HF
+        data_parquet = config_manager.paths.processed_data_dir / dataset_id / "data.parquet"
+        if not data_parquet.exists():
+            missing.append(str(data_parquet))
+
+    if check_kg:
+        printer.print("Checking Kaggle requirements", "info")
+        kg_required = [Path(".kaggle") / "README.md", "dataset-card.md", "LICENSE", "CHANGELOG.md"]
+        for rel in kg_required:
+            path = dataset_dir / rel
+            if not path.exists():
+                missing.append(str(path))
+
+    if missing:
+        # Display table of missing files
+        printer.table(["#", "Missing file"], [[str(i+1), p] for i, p in enumerate(missing)], title="Files to create")
+        printer.guide("Next steps", [
+            "Use --fix to auto-generate placeholder documents",
+            "Or create the files manually as listed above",
+            "Re-run the doctor command afterwards"
+        ])
+
+        if args.fix:
+            _auto_generate_missing_files(dataset_id, dataset_dir, missing)
+        else:
+            sys.exit(1)
+
+    printer.success("All required files exist. Dataset is ready for publishing!")
+
+
+def _create_doctor_commands(subparsers) -> None:
+    """Create the `doctor` command parser."""
+    doctor_parser = subparsers.add_parser("doctor", help="Validate dataset files for publishing")
+    doctor_parser.add_argument("id", help="Dataset ID to validate")
+
+    platform_group = doctor_parser.add_mutually_exclusive_group(required=False)
+    platform_group.add_argument("--hf", action="store_true", help="Check Hugging Face requirements only")
+    platform_group.add_argument("--kg", action="store_true", help="Check Kaggle requirements only")
+
+    doctor_parser.add_argument("--fix", action="store_true", help="Attempt to create any missing files using templates")
+
+    doctor_parser.set_defaults(func=doctor_dataset)
 
 
 def setup_env(args: argparse.Namespace) -> None:
@@ -353,6 +473,9 @@ def create_commands(subparsers) -> None:
 
     # site command
     _create_site_commands(subparsers)
+
+    # doctor command
+    _create_doctor_commands(subparsers)
 
     # setup command
     _create_setup_commands(subparsers)
