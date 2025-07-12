@@ -9,6 +9,13 @@ initial dataset structure.
 from __future__ import annotations
 
 import sys
+from pathlib import Path
+# Ensure project root is on PYTHONPATH when script executed directly
+project_root = Path(__file__).resolve().parents[1]
+if str(project_root) not in sys.path:
+    sys.path.insert(0, str(project_root))
+
+import sys
 from datetime import datetime
 from scripts.utils.printer import printer
 from scripts.utils.config_manager import config_manager
@@ -90,7 +97,7 @@ features:
 
         try:
             template_path.parent.mkdir(exist_ok=True, parents=True)
-            with open(template_path, 'w') as file:
+            with open(template_path, 'w', encoding='utf-8') as file:
                 file.write(template_content)
             printer.success(f"Created template: {template_path}")
         except PermissionError as e:
@@ -134,7 +141,7 @@ def create_dataset(dataset_id: str, name: str, description: str) -> None:
     # Load template
     template_path = config_manager.paths.templates_dir / "dataset.yml.template"
     try:
-        with open(template_path, 'r') as file:
+        with open(template_path, 'r', encoding='utf-8') as file:
             template = file.read()
     except FileNotFoundError:
         printer.error(f"Template file not found: {template_path}")
@@ -151,7 +158,7 @@ def create_dataset(dataset_id: str, name: str, description: str) -> None:
 
     # Write dataset configuration
     try:
-        with open(output_path, 'w') as file:
+        with open(output_path, 'w', encoding='utf-8') as file:
             file.write(content)
 
         # Create dataset directory structure
@@ -159,7 +166,7 @@ def create_dataset(dataset_id: str, name: str, description: str) -> None:
         dataset_dir.mkdir(exist_ok=True, parents=True)
 
         # Create basic index file
-        with open(dataset_dir / "index.md", 'w') as file:
+        with open(dataset_dir / "index.md", 'w', encoding='utf-8') as file:
             file.write(f"""---
 layout: dataset
 title: {name}
