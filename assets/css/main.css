@@ -950,6 +950,12 @@ footer {
   .hero h1 {
     font-size: 3rem;
   }
+}
+
+@media (min-width: 1025px) {
+  .dataset-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 } 
 
 /* Mobile Navigation */
