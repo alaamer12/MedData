@@ -609,22 +609,58 @@ footer {
 }
 
 .status-badge {
-  padding: var(--spacing-xs) var(--spacing-sm);
+  padding: 0.4rem 0.8rem;
   border-radius: var(--radius-full);
-  font-size: 0.75rem;
-  font-weight: 600;
+  font-size: 0.7rem;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.7px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate; /* Creates a new stacking context */
+  transition: all var(--transition-normal);
+  box-shadow: var(--shadow-sm);
+}
+
+.status-badge::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left var(--transition-normal);
+  transform: skewX(-20deg);
+}
+
+.status-badge:hover::before {
+  left: 100%;
 }
 
 .status-badge.published {
-  background-color: rgba(34, 197, 94, 0.1);
-  color: #22c55e;
+  background-color: var(--secondary-color);
+  color: white;
+  box-shadow: 0 4px 10px rgba(20, 184, 166, 0.3);
+}
+
+.status-badge.published:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(20, 184, 166, 0.4);
 }
 
 .status-badge.development {
-  background-color: rgba(245, 158, 11, 0.1);
-  color: #f59e0b;
+  background-color: var(--accent-color);
+  color: white;
+  box-shadow: 0 4px 10px rgba(245, 158, 11, 0.3);
+}
+
+.status-badge.development:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(245, 158, 11, 0.4);
 }
 
 .dataset-card .dataset-meta {
