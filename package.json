@@ -1,0 +1,36 @@
+{
+  "name": "meddata",
+  "version": "1.0.0",
+  "description": "MedData Engineering Hub - A premier data engineering hub providing comprehensive datasets for ML research",
+  "main": "index.js",
+  "scripts": {
+    "generate-logos": "node assets/js/generate-logos.js",
+    "setup-datasets": "node scripts/setup-datasets.js",
+    "setup": "npm run setup-datasets && npm run generate-logos",
+    "fix-docs": "node scripts/fix-docs.js",
+    "build": "bundle exec jekyll build",
+    "serve": "bundle exec jekyll serve",
+    "dev": "bundle exec jekyll serve --livereload",
+    "predeploy": "npm run fix-docs && npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alaamer12/meddata.git"
+  },
+  "keywords": [
+    "datasets",
+    "data-engineering",
+    "machine-learning",
+    "medium",
+    "devto"
+  ],
+  "author": "MedData Team",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/alaamer12/meddata/issues"
+  },
+  "homepage": "https://github.com/alaamer12/meddata#readme",
+  "dependencies": {
+    "js-yaml": "^4.1.0"
+  }
+} 
