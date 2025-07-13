@@ -34,10 +34,7 @@
 
 .documentation-content h1,
 .documentation-content h2,
-.documentation-content h3,
-.documentation-content h4,
-.documentation-content h5,
-.documentation-content h6 {
+.documentation-content h3 {
   margin-top: 2rem;
   margin-bottom: 1rem;
   font-weight: 600;
@@ -51,10 +48,6 @@
 
 .documentation-content h3 {
   font-size: 1.5rem;
-}
-
-.documentation-content h4 {
-  font-size: 1.25rem;
 }
 
 .documentation-content p {
@@ -123,53 +116,8 @@
 }
 
 /* Blockquotes */
-.documentation-content blockquote {
-  border-left: 4px solid var(--primary-color);
-  padding-left: 1rem;
-  margin-left: 0;
-  margin-bottom: 1.5rem;
-  color: var(--text-light);
-}
 
 /* Documentation Navigation */
-.docs-navigation {
-  position: sticky;
-  top: 80px;
-  max-height: calc(100vh - 100px);
-  overflow-y: auto;
-  padding-right: 1.5rem;
-}
-
-.docs-nav-title {
-  font-weight: 600;
-  font-size: 1.125rem;
-  margin-bottom: 1rem;
-  color: var(--text-dark);
-}
-
-.docs-nav-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.docs-nav-item {
-  margin-bottom: 0.5rem;
-}
-
-.docs-nav-link {
-  display: block;
-  padding: 0.375rem 0;
-  color: var(--text-light);
-  text-decoration: none;
-  transition: all 0.2s ease;
-  font-size: 0.95rem;
-}
-
-.docs-nav-link:hover,
-.docs-nav-link.active {
-  color: var(--primary-color);
-}
 
 /* Documentation Footer */
 .docs-footer {

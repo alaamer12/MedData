@@ -11,10 +11,10 @@
   --text-light: #94a3b8;
   --text-dark: #1e293b;
   --border-color: #e2e8f0;
-  
+
   /* Typography */
   --font-base: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  
+
   /* Spacing */
   --spacing-xs: 0.25rem;
   --spacing-sm: 0.5rem;
@@ -22,11 +22,11 @@
   --spacing-lg: 1.5rem;
   --spacing-xl: 2rem;
   --spacing-xxl: 3rem;
-  
+
   /* Container */
   --container-width: 1200px;
   --container-padding: 1rem;
-  
+
   /* Border Radius */
   --radius-sm: 4px;
   --radius-md: 8px;
@@ -45,98 +45,201 @@
   --transition-slow: 0.5s ease;
 }
 
-/* Dark Theme */
+/* Dark Theme Variables */
 [data-theme='dark'] {
-    --background-light: #0f172a;
-    --background-dark: #020617;
-    --text-light: #94a3b8;
-    --text-dark: #e2e8f0;
-    --border-color: #1e293b;
-    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.6), 0 2px 4px -1px rgba(0, 0, 0, 0.56);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.6), 0 4px 6px -2px rgba(0, 0, 0, 0.55);
-    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.6), 0 10px 10px -5px rgba(0, 0, 0, 0.54);
+    --background-light: #1e293b;
+    --background-dark: #0f172a;
+    --text-dark: #f1f5f9;
+    --text-light: #cbd5e1;
+    --border-color: #334155;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
 }
 
+/* Dark Theme Specific Styles */
 [data-theme='dark'] body {
     background-color: var(--background-dark);
-    color: var(--text-light);
-}
-
-[data-theme='dark'] h1, [data-theme='dark'] h2, [data-theme='dark'] h3, [data-theme='dark'] h4, [data-theme='dark'] h5, [data-theme='dark'] h6 {
     color: var(--text-dark);
 }
 
 [data-theme='dark'] header {
-    background-color: #0f172a;
-    box-shadow: var(--shadow-md);
+    background-color: var(--background-light);
+    border-bottom: 1px solid var(--border-color);
 }
 
-[data-theme='dark'] .logo, [data-theme='dark'] nav a, [data-theme='dark'] .dropdown-toggle {
+[data-theme='dark'] .features {
+    background-color: var(--background-light);
+}
+
+[data-theme='dark'] .dataset-card,
+[data-theme='dark'] .feature-card,
+[data-theme='dark'] .workflow-step,
+[data-theme='dark'] .stat-card,
+[data-theme='dark'] .tech-card,
+[data-theme='dark'] .metadata-card {
+    background-color: var(--background-light);
+    border-color: var(--border-color);
+}
+
+[data-theme='dark'] .dataset-stat {
+    background-color: var(--background-dark);
+}
+
+[data-theme='dark'] nav a {
     color: var(--text-dark);
 }
 
 [data-theme='dark'] .dropdown-menu {
-    background-color: #0f172a;
-}
-
-[data-theme='dark'] .dropdown-menu a {
-    color: var(--text-dark);
+    background-color: var(--background-light);
+    border: 1px solid var(--border-color);
 }
 
 [data-theme='dark'] .dropdown-menu a:hover {
-    background-color: #1e293b;
-}
-
-[data-theme='dark'] .dataset-card, [data-theme='dark'] .feature-card, [data-theme='dark'] .stat-card, [data-theme='dark'] .workflow-step, [data-theme='dark'] .tech-card, [data-theme='dark'] .metadata-card, [data-theme='dark'] .preprocessing-section, [data-theme='dark'] .schema-table-wrapper, [data-theme='dark'] .dataset-subnav {
-    background-color: #1e293b;
-    border-color: #334155;
-}
-
-[data-theme='dark'] .dataset-stat {
-    background: #334155;
+    background-color: var(--background-dark);
 }
 
 [data-theme='dark'] .button.secondary {
-    background-color: transparent;
-    color: var(--primary-color);
-    border-color: var(--primary-color);
+    background-color: var(--background-light);
+    color: var(--text-dark);
+    border-color: var(--border-color);
 }
 
 [data-theme='dark'] .button.secondary:hover {
+    background-color: var(--background-dark);
+}
+
+[data-theme='dark'] .dataset-subnav {
+    background-color: var(--background-light);
+    border-bottom-color: var(--border-color);
+}
+
+[data-theme='dark'] .subnav-link:hover,
+[data-theme='dark'] .subnav-link.active {
+    background-color: var(--background-dark);
+}
+
+/* Dataset page sections dark theme */
+[data-theme='dark'] .dataset-page section:nth-child(even) {
+    background-color: var(--background-light);
+}
+
+[data-theme='dark'] .dataset-page section:nth-child(odd) {
+    background-color: var(--background-dark);
+}
+
+[data-theme='dark'] .dataset-page .stats-section,
+[data-theme='dark'] .dataset-page .features,
+[data-theme='dark'] .dataset-page .metadata-section,
+[data-theme='dark'] .dataset-page .technical-section,
+[data-theme='dark'] .dataset-page .cta-section {
+    background-color: var(--background-light);
+}
+
+[data-theme='dark'] .dataset-page .dataset-header {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(20, 184, 166, 0.2));
+}
+
+/* Schema table dark theme */
+[data-theme='dark'] .schema-table-wrapper {
+    background-color: var(--background-light);
+    border-color: var(--border-color);
+}
+
+[data-theme='dark'] .schema-table th {
+    background: linear-gradient(to bottom, var(--background-dark), #1e293b);
+    color: var(--text-dark);
+    border-bottom-color: var(--primary-color);
+}
+
+[data-theme='dark'] .schema-table td {
+    border-bottom-color: var(--border-color);
+}
+
+[data-theme='dark'] .schema-table tr:nth-child(even) {
+    background-color: rgba(15, 23, 42, 0.5);
+}
+
+[data-theme='dark'] .schema-table tr:hover {
     background-color: rgba(99, 102, 241, 0.1);
 }
 
-[data-theme='dark'] .schema-table th {
-    background-color: #334155;
+[data-theme='dark'] .schema-table code {
+    background: linear-gradient(135deg, #334155, #475569);
+    color: #a5b4fc;
+    border-color: #475569;
 }
 
-[data-theme='dark'] .schema-table td, [data-theme='dark'] .schema-table th {
-    border-bottom-color: #334155;
+/* Code block dark theme */
+[data-theme='dark'] .code-block {
+    background: var(--background-dark);
 }
 
-[data-theme='dark'] .subnav-link:hover, [data-theme='dark'] .subnav-link.active {
-    background-color: #334155;
+/* Preprocessing section dark theme */
+[data-theme='dark'] .preprocessing-section {
+    background: var(--background-light);
 }
 
-[data-theme='dark'] .features {
-  background-color: var(--background-dark);
+/* Mobile navigation dark theme */
+[data-theme='dark'] nav {
+    background-color: var(--background-light);
+    color: var(--text-dark);
 }
 
-[data-theme='dark'] .dataset-page .features {
-  background-color: var(--background-dark);
+[data-theme='dark'] nav a {
+    color: var(--text-dark);
+    border-bottom-color: var(--border-color);
 }
 
-[data-theme='dark'] .metadata-section {
-  background-color: var(--background-dark);
+[data-theme='dark'] nav a:hover {
+    color: var(--primary-color);
+    background-color: var(--background-dark);
 }
 
-[data-theme='dark'] .schema-table-wrapper {
-  background-color: var(--background-dark);
+[data-theme='dark'] .dropdown-toggle {
+    color: var(--text-dark);
+    border-bottom-color: var(--border-color);
 }
 
-[data-theme='dark'] .schema-table th {
-  background-color: var(--background-light);
+[data-theme='dark'] .dropdown-toggle:hover {
+    color: var(--primary-color);
+    background-color: var(--background-dark);
+}
+
+[data-theme='dark'] .github-button {
+    background-color: var(--primary-color);
+    color: white;
+    border-bottom: none;
+}
+
+[data-theme='dark'] .github-button:hover {
+    background-color: var(--secondary-color);
+}
+
+/* Footer dark theme adjustments */
+[data-theme='dark'] footer {
+    background-color: var(--background-dark);
+}
+
+[data-theme='dark'] .footer-section h3 {
+    color: var(--text-dark);
+}
+
+[data-theme='dark'] .footer-links a {
+    color: var(--text-light);
+}
+
+[data-theme='dark'] .footer-links a:hover {
+    color: var(--text-dark);
+}
+
+[data-theme='dark'] .platform-link {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme='dark'] .platform-link:hover {
+    background-color: rgba(255, 255, 255, 0.2);
 }
 
 /* Custom Scrollbar Styles */
