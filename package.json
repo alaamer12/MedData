@@ -32,5 +32,8 @@
   "homepage": "https://github.com/alaamer12/meddata#readme",
   "dependencies": {
     "js-yaml": "^4.1.0"
+  },
+  "devDependencies": {
+    "purgecss": "^7.0.2"
   }
-} 
+}
