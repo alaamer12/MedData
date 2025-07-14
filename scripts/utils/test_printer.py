@@ -63,7 +63,7 @@ class TestPrinter(unittest.TestCase):
             })
 
         output = self.stdout.getvalue()
-        self.assertIn("[ERROR] missing_file", output)
+        self.assertIn("[ERROR] File not found", output)
         self.assertIn("File not found", output)
 
     def test_dataset_created(self):
@@ -94,14 +94,13 @@ class TestPrinter(unittest.TestCase):
         setattr(Printer, 'HAS_RICH', False)
 
         try:
-            fallback_printer = Printer()
+            fallback_printer = Printer(use_rich=False)
             with redirect_stdout(self.stdout):
                 fallback_printer.header("Fallback Header")
                 fallback_printer.success("Fallback Success")
 
             output = self.stdout.getvalue()
-            self.assertIn("=== Fallback Header ===", output)
-            self.assertIn("[SUCCESS] Fallback Success", output)
+            self.assertEqual(output, """\n================================================================================\n=== Fallback Header ===\n================================================================================\n[SUCCESS] Fallback Success\n""")
         finally:
             # Restore the original value
             setattr(Printer, 'HAS_RICH', original_has_rich)
