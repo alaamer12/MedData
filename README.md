@@ -141,7 +141,20 @@ python meddata.py assets <dataset_id>
 
 # Build and serve website locally
 python meddata.py site --serve
+
+# Show manual guide
+python meddata.py manual
 ```
+
+### Manual Dataset Creation
+
+For a detailed, step-by-step guide on how to manually add a new dataset, use the `manual` command:
+
+```bash
+python meddata.py manual
+```
+
+This will walk you through the process of creating the necessary files and directories, processing your data, and publishing your dataset.
 
 ## 🤝 Contributing
 
