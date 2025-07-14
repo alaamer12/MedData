@@ -494,6 +494,95 @@ def _create_setup_commands(subparsers) -> None:
     setup_parser.set_defaults(func=setup_env)
 
 
+def show_manual_guide(args: argparse.Namespace) -> None:
+    """
+    Display a guide on how to manually add a new dataset.
+    
+    Args:
+        args: Command line arguments
+    """
+    printer.header("Manual Guide to Add a New Dataset")
+    printer.print("This guide provides detailed steps for manually creating and integrating a new dataset into the MedData Hub.", "info")
+    printer.print("Let's assume you want to add a new dataset with the ID 'my-new-dataset'.", "info")
+
+    # Step 1: Create YAML configuration file
+    printer.subheader("Step 1: Create YAML Configuration File")
+    printer.print("First, you need to define your dataset's metadata. Create a new file named `my-new-dataset.yml` inside the `_datasets/` directory.")
+    printer.print("You can use the template located at `templates/dataset.yml.template` as a starting point.")
+    printer.code_block(
+        '''
+# _datasets/my-new-dataset.yml
+id: my-new-dataset
+name: My New Dataset
+description: A brief description of what this dataset contains.
+status: development # or 'published'
+release_date: 2025-07-15
+# ... and other fields as per the template
+        ''',
+        "yaml"
+    )
+
+    # Step 2: Create Dataset Directory
+    printer.subheader("Step 2: Create Dataset Directory")
+    printer.print("This directory will hold the documentation and the main page for your dataset on the website.")
+    printer.print("Create a new directory: `dataset/my-new-dataset/`")
+    printer.print("Inside this new directory, create an `index.md` file with the following content:")
+    printer.code_block(
+        '''
+---
+layout: dataset
+title: My New Dataset
+description: A brief description of what this dataset contains.
+---
+
+# My New Dataset
+
+This is the main page for the 'My New Dataset'. You can add more details here.
+        ''',
+        "markdown"
+    )
+
+    # Step 3: Create Raw Data Directory
+    printer.subheader("Step 3: Create Raw Data Directory")
+    printer.print("This directory will store the raw data files for your dataset before they are processed.")
+    printer.print("Create a new directory: `_data/raw/my-new-dataset/`")
+
+    # Step 4: Add Raw Data
+    printer.subheader("Step 4: Add Raw Data")
+    printer.print("Place your raw data files (e.g., CSV, JSON, Parquet) into the directory you just created.")
+    printer.print("For example, you might have: `_data/raw/my-new-dataset/data.csv`")
+
+    # Step 5: Process the Dataset
+    printer.subheader("Step 5: Process the Dataset")
+    printer.print("Now, run the `process` command to transform your raw data into a standardized format (e.g., Parquet).")
+    printer.print("This script should be designed to read from `_data/raw/my-new-dataset/` and write the processed output to `_data/processed/my-new-dataset/`.")
+    printer.code_block("python meddata.py process my-new-dataset", "bash")
+
+    # Step 6: Generate Assets
+    printer.subheader("Step 6: Generate Assets (Optional)")
+    printer.print("To generate a logo for your dataset for the website, run the `assets` command:")
+    printer.code_block("python meddata.py assets my-new-dataset", "bash")
+
+    # Step 7: Publish the Dataset
+    printer.subheader("Step 7: Publish the Dataset")
+    printer.print("Once your data is processed and you are ready to publish, use the `publish` command.")
+    printer.print("This will push your dataset to the configured platforms (e.g., Hugging Face, Kaggle).")
+    printer.code_block("python meddata.py publish my-new-dataset", "bash")
+
+    printer.success("You have successfully added a new dataset!")
+
+
+def _create_manual_commands(subparsers) -> None:
+    """
+    Create the manual command parser.
+    
+    Args:
+        subparsers: Subparser collection to add the command to
+    """
+    manual_parser = subparsers.add_parser("manual", help="Show a guide on how to add a new dataset manually")
+    manual_parser.set_defaults(func=show_manual_guide)
+
+
 def create_commands(subparsers) -> None:
     """
     Create all command parsers.
@@ -524,6 +613,10 @@ def create_commands(subparsers) -> None:
 
     # setup command
     _create_setup_commands(subparsers)
+
+    # manual command
+    _create_manual_commands(subparsers)
+
 
 
 def create_parser() -> argparse.ArgumentParser:
