@@ -65,12 +65,12 @@
 }
 
 [data-theme='dark'] header {
-    background-color: var(--background-light);
+    background-color: var(--background-dark);
     border-bottom: 1px solid var(--border-color);
 }
 
 [data-theme='dark'] .features {
-    background-color: var(--background-light);
+    background-color: var(--background-dark);
 }
 
 [data-theme='dark'] .dataset-card,
@@ -122,11 +122,11 @@
 
 /* Dataset page sections dark theme */
 [data-theme='dark'] .dataset-page section:nth-child(even) {
-    background-color: var(--background-light);
+    background-color: var(--background-dark);
 }
 
 [data-theme='dark'] .dataset-page section:nth-child(odd) {
-    background-color: var(--background-dark);
+    background-color: var(--background-light);
 }
 
 [data-theme='dark'] .dataset-page .stats-section,
@@ -134,7 +134,7 @@
 [data-theme='dark'] .dataset-page .metadata-section,
 [data-theme='dark'] .dataset-page .technical-section,
 [data-theme='dark'] .dataset-page .cta-section {
-    background-color: var(--background-light);
+    background-color: var(--background-dark);
 }
 
 [data-theme='dark'] .dataset-page .dataset-header {
@@ -292,3 +292,39 @@
   background: var(--secondary-color);
   color: var(--background-dark);
 }
+
+/* Scroll progress indicator */
+
+[data-theme='dark'] .dataTables_wrapper {
+    color: var(--text-light);
+  }
+
+  [data-theme='dark'] .dataTables_wrapper .dataTables_filter input {
+    background-color: var(--background-dark);
+    border: 1px solid #475569;
+    color: var(--text-light);
+  }
+
+  [data-theme='dark'] .dataTables_wrapper .dataTables_filter input:focus {
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 0 2px rgba(20, 184, 166, 0.2);
+    outline: none;
+  }
+
+  [data-theme='dark'] .dataTables_wrapper .dataTables_paginate .paginate_button {
+    background-color: var(--background-dark);
+    border: 1px solid #475569;
+    color: var(--text-light);
+  }
+
+  [data-theme='dark'] .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    background-color: var(--background-light);
+    border-color: var(--secondary-color);
+    color: var(--text-dark);
+  }
+
+  [data-theme='dark'] .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+    background: var(--secondary-color) !important;
+    border-color: var(--secondary-color) !important;
+    color: var(--background-dark) !important;
+  }
