@@ -230,6 +230,25 @@
 }
 
 /* Blockquotes */
+.documentation-content blockquote {
+  margin: 2rem 0;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, rgba(20, 184, 166, 0.1), rgba(99, 102, 241, 0.1));
+  border-left: 4px solid var(--secondary-color);
+  border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+  font-style: italic;
+  position: relative;
+}
+
+.documentation-content blockquote::before {
+  content: '"';
+  font-size: 4rem;
+  color: var(--secondary-color);
+  position: absolute;
+  top: -0.5rem;
+  left: 1rem;
+  opacity: 0.3;
+}
 
 /* Documentation Footer */
 .docs-footer {
