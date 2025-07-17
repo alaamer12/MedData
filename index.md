@@ -7,7 +7,7 @@ description: A premier data engineering hub providing comprehensive datasets for
 <section id="datasets" class="datasets">
   <div class="container">
     <div class="section-header">
-      <h2>Available Datasets</h2>
+      <h2>Available Datasets [>_]</h2>
       <p class="section-subtitle">Explore our curated collection of high-quality datasets</p>
     </div>
     <div class="dataset-grid">
