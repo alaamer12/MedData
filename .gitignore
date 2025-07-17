@@ -90,3 +90,4 @@ medium/kaggle/.kaggle/kaggle.json
 tmp/
 temp/
 hub/medium/app/.venv/*
+node_modules/*
