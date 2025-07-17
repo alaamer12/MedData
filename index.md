@@ -55,33 +55,36 @@ description: A premier data engineering hub providing comprehensive datasets for
   </div>
 </section>
 
-<section class="workflow-section">
+<section class="how-it-works">
   <div class="container">
     <div class="section-header">
       <h2>How It Works</h2>
-      <p class="section-subtitle">Get started in three simple steps</p>
+      <h3 class="section-subtitle">Get started in three simple steps</h3>
     </div>
-    <div class="workflow-steps">
+    <div class="workflow-grid">
       <div class="workflow-step reveal">
-        <div class="step-number">1</div>
-        <div class="step-content">
-          <h3>Browse Datasets</h3>
-          <p>Explore our collection of high-quality, curated datasets for machine learning and data science research.</p>
+        <div class="workflow-number">1</div>
+        <div class="workflow-icon">
+          <span>🔍</span>
         </div>
+        <h3>Browse Datasets</h3>
+        <p>Explore our collection of high-quality, curated datasets for machine learning and data science research.</p>
       </div>
       <div class="workflow-step reveal">
-        <div class="step-number">2</div>
-        <div class="step-content">
-          <h3>Import Data</h3>
-          <p>Easily import datasets into your projects using Hugging Face's datasets library or direct downloads.</p>
+        <div class="workflow-number">2</div>
+        <div class="workflow-icon">
+          <span>📊</span>
         </div>
+        <h3>Import Data</h3>
+        <p>Easily import datasets into your projects using Hugging Face's datasets library or direct downloads.</p>
       </div>
       <div class="workflow-step reveal">
-        <div class="step-number">3</div>
-        <div class="step-content">
-          <h3>Build & Deploy</h3>
-          <p>Focus on building your models and applications with clean, ready-to-use data at your fingertips.</p>
+        <div class="workflow-number">3</div>
+        <div class="workflow-icon">
+          <span>🚀</span>
         </div>
+        <h3>Build & Deploy</h3>
+        <p>Focus on building your models and applications with clean, ready-to-use data at your fingertips.</p>
       </div>
     </div>
   </div>
