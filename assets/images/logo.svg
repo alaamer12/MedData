@@ -1,16 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <rect width="32" height="32" rx="4" fill="#0f172a"/>
-    <text x="16" y="20" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="16" fill="white">
-        M
-    </text>
-    <path d="M8 24h16" stroke="url(#gradient)" stroke-width="2"/>
-    <circle cx="8" cy="24" r="1.5" fill="#6366f1"/>
-    <circle cx="24" cy="24" r="1.5" fill="#14b8a6"/>
+<svg width="64" height="64" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
     <defs>
-        <linearGradient id="gradient" x1="8" y1="24" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+        <clipPath id="hexagonClip">
+            <path d="M8 4l8-4 8 4v8l-8 4-8-4V4z"/>
+        </clipPath>
+        <linearGradient id="hexGradient" x1="8" y1="0" x2="24" y2="16" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#1e293b"/>
+            <stop offset="100%" stop-color="#0f172a"/>
+        </linearGradient>
+        <linearGradient id="dataGradient" x1="4" y1="24" x2="28" y2="24" gradientUnits="userSpaceOnUse">
             <stop offset="0%" stop-color="#6366f1"/>
+            <stop offset="50%" stop-color="#8b5cf6"/>
             <stop offset="100%" stop-color="#14b8a6"/>
         </linearGradient>
     </defs>
-</svg> 
+
+    <path d="M8 4l8-4 8 4v8l-8 4-8-4V4z" fill="url(#hexGradient)"/>
+
+    <text x="16" y="8" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="16" fill="#A5B4FC" clip-path="url(#hexagonClip)">M</text>
+
+    <path d="M4 24h24" stroke="url(#dataGradient)" stroke-width="2"/>
+    <circle cx="6" cy="24" r="2" fill="#6366f1"/>
+    <circle cx="16" cy="24" r="2" fill="#8b5cf6"/>
+    <circle cx="26" cy="24" r="2" fill="#14b8a6"/>
+</svg>
