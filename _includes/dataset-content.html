@@ -206,7 +206,6 @@ print(f"Total samples: {len(dataset['train'])}")</code></pre>
                 <th>Field</th>
                 <th>Type</th>
                 <th>Description</th>
-                <th>Required</th>
               </tr>
             </thead>
             <tbody>
@@ -215,7 +214,6 @@ print(f"Total samples: {len(dataset['train'])}")</code></pre>
                 <td><code>{{ field.name }}</code></td>
                 <td><code>{{ field.type }}</code></td>
                 <td>{{ field.description }}</td>
-                <td>{% if field.nullable == false %}✓{% else %}—{% endif %}</td>
               </tr>
               {% endfor %}
             </tbody>

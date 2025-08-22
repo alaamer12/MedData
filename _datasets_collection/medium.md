@@ -15,7 +15,7 @@ logo:
 stats:
   - value: 500K+
     label: Articles
-  - value: 10+
+  - value: 20+
     label: Fields
   - value: 100%
     label: Unique Entries
@@ -57,46 +57,63 @@ dataset_details:
     - name: validation
       records: 12,308
   schema:
+    - name: postId
+      type: object
+      description: Unique identifier for the article
     - name: title
-      type: string
+      type: object
       description: The title of the article
-      nullable: false
-    - name: subtitle
-      type: string
+    - name: subTitle
+      type: object
       description: The subtitle or description of the article
-      nullable: true
-    - name: author
-      type: string
-      description: The name of the article's author
-      nullable: false
-    - name: publication
-      type: string
-      description: The name of the publication the article belongs to
-      nullable: true
-    - name: date
-      type: datetime
-      description: The publication date of the article
-      nullable: false
-    - name: url
-      type: string
-      description: The URL of the article
-      nullable: false
-    - name: content
-      type: string
+    - name: text
+      type: object
       description: The full text content of the article
-      nullable: false
-    - name: claps
-      type: integer
-      description: Number of claps (likes) the article received
-      nullable: true
-    - name: reading_time
-      type: float
+    - name: url
+      type: object
+      description: The URL of the article
+    - name: author
+      type: object
+      description: The name of the article's author
+    - name: publicationname
+      type: object
+      description: The name of the publication the article belongs to
+    - name: createdDate
+      type: object
+      description: The creation date of the article
+    - name: firstPublishedDate
+      type: object
+      description: The first publication date of the article
+    - name: latestPublishedDate
+      type: object
+      description: The latest publication date of the article
+    - name: totalClapCount
+      type: float64
+      description: Total number of claps (likes) the article received
+    - name: readingTime
+      type: float64
       description: Estimated reading time in minutes
-      nullable: true
-    - name: topics
-      type: list[string]
-      description: List of topics/tags associated with the article
-      nullable: true
+    - name: recommends
+      type: float64
+      description: Number of recommendations the article received
+    - name: responsesCreatedCount
+      type: float64
+      description: Number of responses/comments created for the article
+    - name: wordCount
+      type: float64
+      description: Total word count of the article
+    - name: tags
+      type: object
+      description: List of tags associated with the article
+    - name: language
+      type: object
+      description: Language of the article
+    - name: uniqueSlug
+      type: object
+      description: Unique slug identifier for the article
+    - name: collectionId
+      type: object
+      description: Collection ID if the article belongs to a collection
 
   preprocessing:
     - Removed duplicate articles based on URL and content similarity

@@ -224,7 +224,6 @@ print(f"Total samples: {len(dataset['train'])}")</code></pre>
                 <th>Field</th>
                 <th>Type</th>
                 <th>Description</th>
-                <th>Required</th>
               </tr>
             </thead>
             <tbody>
@@ -233,7 +232,6 @@ print(f"Total samples: {len(dataset['train'])}")</code></pre>
                 <td><code>{{ field.name }}</code></td>
                 <td><code>{{ field.type }}</code></td>
                 <td>{{ field.description }}</td>
-                <td>{% if field.nullable == false %}✓{% else %}—{% endif %}</td>
               </tr>
               {% endfor %}
             </tbody>
@@ -327,7 +325,7 @@ print(f"Total samples: {len(dataset['train'])}")</code></pre>
           lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
           order: [[0, 'asc']],
           columnDefs: [
-            { targets: [3], orderable: false }
+            { targets: [2], orderable: false }
           ],
           language: {
             search: "Search fields:",

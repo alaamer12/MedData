@@ -362,7 +362,6 @@ DATASET_PAGE_TEMPLATE = """<!DOCTYPE html>
                     <th>Field</th>
                     <th>Type</th>
                     <th>Description</th>
-                    <th>Nullable</th>
                 </tr>
             </thead>
             <tbody>
@@ -389,7 +388,6 @@ SCHEMA_ROW_TEMPLATE = """
     <td>$NAME</td>
     <td>$TYPE</td>
     <td>$DESCRIPTION</td>
-    <td>$NULLABLE</td>
 </tr>
 """
 
@@ -470,8 +468,7 @@ def generate_schema_row_html(field):
     return Template(SCHEMA_ROW_TEMPLATE).substitute(
         NAME=field.get('name', ''),
         TYPE=field.get('type', ''),
-        DESCRIPTION=field.get('description', ''),
-        NULLABLE='Yes' if field.get('nullable') else 'No'
+        DESCRIPTION=field.get('description', '')
     )
 
 

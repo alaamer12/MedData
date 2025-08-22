@@ -17,7 +17,7 @@ logo:
 stats:
   - value: 200K+
     label: Articles
-  - value: 15+
+  - value: 25+
     label: Fields
   - value: 100%
     label: Unique Entries
@@ -57,62 +57,78 @@ dataset_details:
     - name: validation
       records: 7,550
   schema:
+    - name: id
+      type: int64
+      description: Unique identifier for the article
+    - name: type_of
+      type: object
+      description: Type of content (usually 'article')
     - name: title
-      type: string
+      type: object
       description: The title of the article
-      nullable: false
     - name: description
-      type: string
+      type: object
       description: Brief description or summary of the article
-      nullable: true
-    - name: author_name
-      type: string
-      description: The name of the article's author
-      nullable: false
-    - name: author_username
-      type: string
-      description: The username of the article's author
-      nullable: false
-    - name: published_at
-      type: datetime
-      description: The publication date and time of the article
-      nullable: false
-    - name: edited_at
-      type: datetime
-      description: The last edit date and time of the article
-      nullable: true
+    - name: slug
+      type: object
+      description: URL slug for the article
+    - name: path
+      type: object
+      description: Path to the article on Dev.to
     - name: url
-      type: string
-      description: The URL of the article
-      nullable: false
+      type: object
+      description: Full URL of the article
     - name: canonical_url
-      type: string
+      type: object
       description: The canonical URL if the article is republished
-      nullable: true
-    - name: content
-      type: string
-      description: The full text content of the article
-      nullable: false
-    - name: code_snippets
-      type: list[object]
-      description: Extracted code snippets with language identification
-      nullable: true
-    - name: tags
-      type: list[string]
-      description: List of tags associated with the article
-      nullable: false
-    - name: reactions_count
-      type: integer
-      description: Total number of reactions to the article
-      nullable: false
     - name: comments_count
-      type: integer
+      type: int64
       description: Number of comments on the article
-      nullable: false
+    - name: public_reactions_count
+      type: int64
+      description: Number of public reactions to the article
+    - name: positive_reactions_count
+      type: int64
+      description: Number of positive reactions to the article
     - name: reading_time_minutes
-      type: integer
+      type: int64
       description: Estimated reading time in minutes
-      nullable: false
+    - name: published_at
+      type: object
+      description: The publication date and time of the article
+    - name: created_at
+      type: object
+      description: The creation date and time of the article
+    - name: edited_at
+      type: object
+      description: The last edit date and time of the article
+    - name: readable_publish_date
+      type: object
+      description: Human-readable publication date
+    - name: published_timestamp
+      type: object
+      description: Publication timestamp
+    - name: tags
+      type: object
+      description: List of tags associated with the article
+    - name: tag_list
+      type: object
+      description: Comma-separated list of tags
+    - name: user
+      type: object
+      description: User information (author details)
+    - name: organization
+      type: object
+      description: Organization information if applicable
+    - name: language
+      type: object
+      description: Language of the article
+    - name: cover_image
+      type: object
+      description: URL of the cover image
+    - name: social_image
+      type: object
+      description: URL of the social media image
 
   preprocessing:
     - Extracted code blocks and identified programming languages
