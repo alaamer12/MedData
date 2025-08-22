@@ -134,29 +134,56 @@ layout: default
   {% if page.status == 'published' %}
   <section id="usage" class="code-section">
     <div class="container">
-      <h2>Usage Example</h2>
+      <h2>Usage Examples</h2>
+      
+      <h3>Dataset Method</h3>
       <div class="code-block">
-        <button class="copy-button" onclick="copyCode()">
+        <button class="copy-button" onclick="copyCode(this)">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
             <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
           </svg>
           Copy
         </button>
-        <pre><code>from datasets import load_dataset
+        <pre><code class="language-python">from datasets import load_dataset
 
-# Load {{ page.name }}
-dataset = load_dataset("{{ page.publishing[0].repository }}")
+# Login using e.g. `huggingface-cli login` to access this dataset
+ds = load_dataset("{{ page.publishing[0].repository }}")</code></pre>
+      </div>
 
-# Basic usage
-for item in dataset['train']:
-    print(f"Title: {item['title']}")
+      <h3>Dask Method</h3>
+      <div class="code-block">
+        <button class="copy-button" onclick="copyCode(this)">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          Copy
+        </button>
+        <pre><code class="language-python">import dask.dataframe as dd
 
-# Available fields
-print(f"Available fields: {dataset['train'].features}")
+# Login using e.g. `huggingface-cli login` to access this dataset
+df = dd.read_parquet("hf://datasets/{{ page.publishing[0].repository }}/data/train-*.parquet")</code></pre>
+      </div>
 
-# Dataset statistics
-print(f"Total samples: {len(dataset['train'])}")</code></pre>
+      <h3>Croissant Method</h3>
+      <div class="code-block">
+        <button class="copy-button" onclick="copyCode(this)">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          Copy
+        </button>
+        <pre><code class="language-python">import requests
+from huggingface_hub.file_download import build_hf_headers
+from mlcroissant import Dataset
+
+# Login using e.g. `huggingface-cli login` to access this dataset
+headers = build_hf_headers()  # handles authentication
+jsonld = requests.get("https://huggingface.co/api/datasets/{{ page.publishing[0].repository }}/croissant", headers=headers).json()
+ds = Dataset(jsonld=jsonld)
+records = ds.records("default")</code></pre>
       </div>
     </div>
   </section>
@@ -301,15 +328,16 @@ print(f"Total samples: {len(dataset['train'])}")</code></pre>
     }
 
     // Code copy button
-    window.copyCode = function() {
-      const codeBlock = document.querySelector('.code-block code');
-      const copyButton = document.querySelector('.copy-button');
+    window.copyCode = function(button) {
+      const codeBlock = button.parentElement.querySelector('code');
+      const copyButton = button;
 
       if (codeBlock) {
         navigator.clipboard.writeText(codeBlock.textContent).then(function() {
+          const originalHTML = copyButton.innerHTML;
           copyButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Copied!';
           setTimeout(function() {
-            copyButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg> Copy';
+            copyButton.innerHTML = originalHTML;
           }, 2000);
         });
       }
