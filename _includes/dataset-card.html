@@ -7,13 +7,10 @@
       </span>
     </div>
     
-    {% if include.dataset.logo.text %}
-      <div class="dataset-logo">{{ include.dataset.logo.text }}</div>
-    {% elsif include.dataset.logo.url %}
-      <img src="{{ include.dataset.logo.url }}" alt="{{ include.dataset.name }}" class="dataset-logo">
-    {% else %}
-      <img src="{{ site.baseurl }}/assets/images/{{ include.dataset.id | default: 'default' }}-logo.svg" alt="{{ include.dataset.name | default: 'Dataset' }}" class="dataset-logo" onerror="this.onerror=null; this.src='{{ site.baseurl }}/assets/images/default-logo.svg';">
-    {% endif %}
+    <div class="dataset-logo-container">
+      <img src="{{ site.baseurl }}/assets/images/{{ include.dataset.id | default: 'default' }}-logo.svg" alt="{{ include.dataset.name | default: 'Dataset' }}" class="dataset-logo dataset-logo-svg" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div class="dataset-logo dataset-logo-fallback" style="display: none;">{{ include.dataset.logo.text | default: include.dataset.name | slice: 0 }}</div>
+    </div>
     
     <h3>{{ include.dataset.name | default: "Dataset" }}</h3>
     <p>{{ include.dataset.description | default: "No description available" | truncate: 120 }}</p>

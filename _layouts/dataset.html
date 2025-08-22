@@ -58,11 +58,10 @@ layout: default
 <div class="dataset-page" data-dataset-id="{{ page.id }}">
   <header class="dataset-header">
     <div class="container">
-      {% if page.logo.text %}
-        <div class="dataset-logo">{{ page.logo.text }}</div>
-      {% else %}
-        <img src="{{ site.baseurl }}/assets/images/{{ page.id }}-logo.svg" alt="{{ page.name }} Logo" class="dataset-logo">
-      {% endif %}
+      <div class="dataset-logo-container">
+        <img src="{{ site.baseurl }}/assets/images/{{ page.id }}-logo.svg" alt="{{ page.name }} Logo" class="dataset-logo dataset-logo-svg" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <div class="dataset-logo dataset-logo-fallback" style="display: none;">{{ page.logo.text }}</div>
+      </div>
       <h1>{{ page.name }}</h1>
       <p>{{ page.description }}</p>
       <div class="dataset-meta">
