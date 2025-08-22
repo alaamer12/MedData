@@ -1,8 +1,8 @@
 id: devto
 name: Dev.to Articles Dataset
 description: A comprehensive collection of technical articles from Dev.to with code snippets and rich metadata
-status: development
-release_date: TBD
+status: published
+release_date: 2024-03-03
 expected_update: quarterly
 logo:
   text: D

@@ -4,7 +4,7 @@ title: Medium Articles Dataset
 description: A comprehensive collection of Medium articles with rich metadata
 id: medium
 status: published
-release_date: 2023-01-15T00:00:00.000Z
+release_date: 2024-01-15T00:00:00.000Z
 expected_update: quarterly
 logo:
   text: M
