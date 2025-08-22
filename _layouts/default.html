@@ -11,6 +11,9 @@
     <meta name="keywords" content="{% if page.keywords %}{{ page.keywords }}{% else %}datasets, machine learning, data science, NLP{% endif %}">
     <meta name="author" content="Alaamer">
     <meta name="robots" content="index, follow">
+    {% if page.layout == 'dataset' and page.id %}
+    <meta name="dataset-id" content="{{ page.id }}">
+    {% endif %}
     <meta name="language" content="English">
     <meta name="revisit-after" content="7 days">
     
@@ -70,5 +73,6 @@
     <!-- Scripts -->
     <script src="{{ site.baseurl }}/assets/js/main.js"></script>
     <script src="{{ site.baseurl }}/assets/js/theme.js"></script>
+    <script src="{{ site.baseurl }}/assets/js/favicon-updater.js"></script>
 </body>
 </html>
