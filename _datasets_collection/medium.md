@@ -22,9 +22,11 @@ stats:
 sources:
   - platform: kaggle
     dataset: aiswaryaramachandran/medium-articles-with-content
+    url: https://www.kaggle.com/datasets/aiswaryaramachandran/medium-articles-with-content
     file: Medium_AggregatedData.csv
   - platform: huggingface
     dataset: fabiochiu/medium-articles
+    url: https://huggingface.co/datasets/fabiochiu/medium-articles
 publishing:
   - platform: huggingface
     repository: Alaamer/medium-articles-posts-with-content

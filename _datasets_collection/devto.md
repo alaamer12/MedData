@@ -24,6 +24,7 @@ stats:
 sources:
   - platform: kaggle
     dataset: devto/articles
+    url: https://www.kaggle.com/datasets/devto/articles
     file: DevTo_AggregatedData.csv
 publishing:
   - platform: huggingface
