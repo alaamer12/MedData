@@ -13,7 +13,7 @@ logo:
     primary: '#6366f1'
     secondary: '#14b8a6'
 stats:
-  - value: 500K+
+  - value: 444K+
     label: Articles
   - value: 20+
     label: Fields
@@ -49,13 +49,13 @@ features:
       Compatible with popular ML frameworks and available through Hugging Face's
       datasets library.
 dataset_details:
-  size: 4.8 GB
+  size: 1.48 GB
   file_format: CSV, JSON, Parquet
   splits:
     - name: train
-      records: 487,692
+      records: 400,133
     - name: validation
-      records: 12,308
+      records: 44,460
   schema:
     - name: postId
       type: object

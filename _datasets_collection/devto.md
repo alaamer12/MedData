@@ -15,7 +15,7 @@ logo:
     primary: '#3b82f6'
     secondary: '#8b5cf6'
 stats:
-  - value: 200K+
+  - value: 307K+
     label: Articles
   - value: 25+
     label: Fields
@@ -49,13 +49,13 @@ features:
       Includes reactions, comments, and other community engagement metrics for
       each article.
 dataset_details:
-  size: 2.3 GB
+  size: 155 MB
   file_format: CSV, JSON, Parquet
   splits:
     - name: train
-      records: 192,450
+      records: 276,639
     - name: validation
-      records: 7,550
+      records: 30,738
   schema:
     - name: id
       type: int64
