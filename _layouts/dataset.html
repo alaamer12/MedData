@@ -212,29 +212,7 @@ print(f"Total samples: {len(dataset['train'])}")</code></pre>
           </ul>
         </div>
 
-        <div class="tech-card">
-          <h3>Statistics</h3>
-          <ul class="tech-list">
-            {% for stat_pair in page.dataset_details.statistics %}
-              {% if stat_pair[1].first %}
-                <li>
-                  <strong>{{ stat_pair[0] | replace: '_', ' ' | capitalize }}</strong>:
-                  <ul class="nested-list">
-                    {% for item in stat_pair[1] %}
-                      {% if item.first %}
-                        <li>{{ item.first }}: {{ item.last }}</li>
-                      {% else %}
-                        <li>{{ item }}</li>
-                      {% endif %}
-                    {% endfor %}
-                  </ul>
-                </li>
-              {% else %}
-                <li><strong>{{ stat_pair[0] | replace: '_', ' ' | capitalize }}</strong>: {{ stat_pair[1] }}</li>
-              {% endif %}
-            {% endfor %}
-          </ul>
-        </div>
+
       </div>
 
       <div class="schema-section">

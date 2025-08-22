@@ -113,27 +113,7 @@ dataset_details:
       type: integer
       description: Estimated reading time in minutes
       nullable: false
-  statistics:
-    avg_content_length: 1,856 words
-    avg_reading_time: 7.2 minutes
-    avg_code_snippets: 3.5 per article
-    top_tags:
-      - javascript
-      - webdev
-      - react
-      - python
-      - beginners
-      - node
-      - css
-      - tutorial
-    language_distribution:
-      - JavaScript: 28%
-      - Python: 17%
-      - HTML/CSS: 12%
-      - TypeScript: 10%
-      - Ruby: 5%
-      - Java: 5%
-      - Other: 23%
+
   preprocessing:
     - Extracted code blocks and identified programming languages
     - Normalized tags to lowercase and removed duplicates

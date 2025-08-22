@@ -97,20 +97,7 @@ dataset_details:
       type: list[string]
       description: List of topics/tags associated with the article
       nullable: true
-  statistics:
-    avg_content_length: 4,256 words
-    avg_reading_time: 12.3 minutes
-    top_topics:
-      - Data Science
-      - Machine Learning
-      - Programming
-      - Technology
-      - AI
-    language_distribution:
-      - English: 92%
-      - Spanish: 3%
-      - French: 2%
-      - Other: 3%
+
   preprocessing:
     - Removed duplicate articles based on URL and content similarity
     - Cleaned HTML tags and special characters from content
